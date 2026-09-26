@@ -12,5 +12,6 @@ class SiteSettings extends Model
     protected $fillable = [
         'address', 'phone', 'whatsapp', 'email',
         'instagram_url', 'facebook_url', 'tiktok_url', 'twitter_url',
+        'about_hero_image_url' // Add this field
     ];
 }

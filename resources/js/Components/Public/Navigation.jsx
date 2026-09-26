@@ -23,13 +23,20 @@ export default function Navigation() {
     };
 
     return (
-        <nav className="bg-brand-navy text-white sticky top-0 z-50 shadow-md">
+        <nav className="bg-brand-navy/95 backdrop-blur-sm text-white sticky top-0 z-50 shadow-md">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-20 items-center">
                     {/* Logo Area */}
                     <div className="flex-shrink-0 flex items-center">
-                        <Link href="/" className="font-heading font-bold text-2xl tracking-wide text-brand-paper hover:text-brand-gold transition-colors">
-                            TMCC
+                        <Link href="/" className="flex items-center gap-3">
+                            <img 
+                                src="/image/logo_tova_matano.png" 
+                                alt="Logo Tova Matano Care Center" 
+                                className="h-10 w-auto"
+                            />
+                            <span className="font-heading font-bold text-2xl tracking-wide text-brand-paper hover:text-brand-gold transition-colors hidden sm:block">
+                                TMCC
+                            </span>
                         </Link>
                     </div>
 
@@ -80,7 +87,7 @@ export default function Navigation() {
 
             {/* Mobile Menu */}
             {isOpen && (
-                <div className="md:hidden bg-brand-navy border-t border-slate-700">
+                <div className="md:hidden bg-brand-navy/95 backdrop-blur-md border-t border-slate-700">
                     <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3">
                         {navLinks.map((link) => (
                             <Link

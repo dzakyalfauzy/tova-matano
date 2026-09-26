@@ -4,7 +4,9 @@ namespace App\Filament\Pages;
 
 use App\Models\SiteSettings;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -25,18 +27,29 @@ class ManageSiteSettings extends Page
         $this->form->fill($settings->toArray());
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                TextInput::make('address'),
-                TextInput::make('phone')->tel(),
-                TextInput::make('whatsapp')->tel(),
-                TextInput::make('email')->email(),
-                TextInput::make('instagram_url')->url(),
-                TextInput::make('facebook_url')->url(),
-                TextInput::make('tiktok_url')->url(),
-                TextInput::make('twitter_url')->url(),
+        return $schema
+            ->components([
+                Section::make('Tampilan Header')
+                    ->schema([
+                        FileUpload::make('about_hero_image_url')
+                            ->label('Background Image Halaman Tentang Kami')
+                            ->image()
+                            ->disk('public')
+                            ->directory('settings'),
+                    ]),
+                Section::make('Kontak & Media Sosial')
+                    ->schema([
+                        TextInput::make('address'),
+                        TextInput::make('phone')->tel(),
+                        TextInput::make('whatsapp')->tel(),
+                        TextInput::make('email')->email(),
+                        TextInput::make('instagram_url')->url(),
+                        TextInput::make('facebook_url')->url(),
+                        TextInput::make('tiktok_url')->url(),
+                        TextInput::make('twitter_url')->url(),
+                    ])->columns(2),
             ])
             ->statePath('data');
     }
