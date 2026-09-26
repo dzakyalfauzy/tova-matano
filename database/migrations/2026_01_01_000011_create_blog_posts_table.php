@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('blog_posts', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->enum('category', ['EDUKASI', 'RILIS_PERS', 'BERITA', 'KEBIJAKAN']);
+            $table->string('cover_image_url')->nullable();
+            $table->longText('content');
+            $table->timestamp('published_at')->useCurrent();
+            $table->boolean('is_published')->default(true);
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('blog_posts');
+    }
+};
