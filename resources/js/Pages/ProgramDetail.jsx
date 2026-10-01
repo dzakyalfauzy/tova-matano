@@ -1,8 +1,8 @@
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, Calendar, Youtube, Instagram } from 'lucide-react';
+import { ArrowLeft, Calendar, ExternalLink, Link as LinkIcon } from 'lucide-react';
 
-export default function ProgramDetail({ activity, settings }) {
+export default function ProgramDetail({ program, activity, settings }) {
     const embedYoutube = (url) => {
         if (!url) return null;
         const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -28,9 +28,9 @@ export default function ProgramDetail({ activity, settings }) {
 
                 <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     {/* Back */}
-                    <Link href="/program" className="inline-flex items-center gap-2 text-brand-teal hover:text-brand-navy transition-colors mb-8 text-sm font-medium">
+                    <Link href={`/program/${program.slug}`} className="inline-flex items-center gap-2 text-brand-teal hover:text-brand-navy transition-colors mb-8 text-sm font-medium">
                         <ArrowLeft className="h-4 w-4" />
-                        Kembali ke Program
+                        Kembali ke Program {program.name}
                     </Link>
 
                     {/* Title & Meta */}
@@ -59,7 +59,7 @@ export default function ProgramDetail({ activity, settings }) {
                     {activity.youtube_url && embedYoutube(activity.youtube_url) && (
                         <div className="bg-white rounded-2xl shadow-sm p-6 mb-8">
                             <div className="flex items-center gap-2 mb-4">
-                                <Youtube className="h-5 w-5 text-red-500" />
+                                <ExternalLink className="h-5 w-5 text-red-500" />
                                 <h3 className="font-bold text-brand-navy">Video Dokumentasi</h3>
                             </div>
                             <div className="aspect-video rounded-xl overflow-hidden">
@@ -82,7 +82,7 @@ export default function ProgramDetail({ activity, settings }) {
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-3 text-brand-teal hover:text-brand-navy transition-colors font-medium"
                             >
-                                <Instagram className="h-5 w-5" />
+                                <LinkIcon className="h-5 w-5" />
                                 Lihat di Instagram
                             </a>
                         </div>

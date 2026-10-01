@@ -19,15 +19,6 @@ class HeroSlidesTable
                 ImageColumn::make('image_url'),
                 TextColumn::make('title')
                     ->searchable(),
-                TextColumn::make('subtitle')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('cta_label')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('cta_url')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 IconColumn::make('is_active')
                     ->boolean(),
                 TextColumn::make('created_at')

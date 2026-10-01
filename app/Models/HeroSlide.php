@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
+use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 
-class HeroSlide extends Model
+class HeroSlide extends Model implements TranslatableContract
 {
+    use Translatable;
+
+    public $translatedAttributes = ['title', 'subtitle', 'cta_label'];
+
     protected $fillable = [
-        'image_url', 'title', 'subtitle', 'cta_label', 'cta_url', 'order', 'is_active',
+        'image_url', 'cta_url', 'order', 'is_active',
     ];
 
     protected $casts = [

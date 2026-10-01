@@ -18,7 +18,13 @@ class BlogPostResource extends Resource
 {
     protected static ?string $model = BlogPost::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-document-text';
+    
+    protected static \UnitEnum|string|null $navigationGroup = 'Konten Website';
+    
+    protected static ?string $modelLabel = 'Tova Blog';
+    
+    protected static ?string $pluralModelLabel = 'Tova Blog';
 
     protected static ?string $recordTitleAttribute = 'title';
 

@@ -1,0 +1,23 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('site_settings', function (Blueprint $table) {
+            $table->string('org_hero_image_url')->nullable();
+            $table->string('org_chart_image_url')->nullable(); // Bagan organisasi
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('site_settings', function (Blueprint $table) {
+            $table->dropColumn(['org_hero_image_url', 'org_chart_image_url']);
+        });
+    }
+};

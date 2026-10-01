@@ -5,7 +5,7 @@ namespace App\Filament\Pages;
 use App\Models\SiteSettings;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Pages\Page;
 use Filament\Actions\Action;
@@ -31,10 +31,32 @@ class ManageSiteSettings extends Page
     {
         return $schema
             ->components([
-                Section::make('Tampilan Header')
+                Section::make('Statistik Beranda')
+                    ->description('Angka-angka yang tampil di section Tentang Kami pada halaman Beranda. Relawan Aktif & Program Terlaksana dihitung otomatis dari database.')
+                    ->schema([
+                        TextInput::make('stat_sampah_terangkut')
+                            ->label('Sampah Terangkut')
+                            ->placeholder('contoh: 2,4T')
+                            ->helperText('Isi dengan nilai dan satuan, misal: 2,4 Ton atau 2,4T'),
+                        TextInput::make('stat_sekolah_teredukasi')
+                            ->label('Sekolah Teredukasi')
+                            ->placeholder('contoh: 8')
+                            ->helperText('Isi dengan jumlah sekolah yang sudah teredukasi'),
+                    ])->columns(2),
+                Section::make('Tampilan Header & Gambar')
                     ->schema([
                         FileUpload::make('about_hero_image_url')
                             ->label('Background Image Halaman Tentang Kami')
+                            ->image()
+                            ->disk('public')
+                            ->directory('settings'),
+                        FileUpload::make('org_hero_image_url')
+                            ->label('Background Image Halaman Struktur Organisasi')
+                            ->image()
+                            ->disk('public')
+                            ->directory('settings'),
+                        FileUpload::make('org_chart_image_url')
+                            ->label('Gambar Bagan Organisasi (Opsional)')
                             ->image()
                             ->disk('public')
                             ->directory('settings'),

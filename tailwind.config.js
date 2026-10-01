@@ -25,7 +25,7 @@ export default {
                 heading: ['"Fraunces"', ...defaultTheme.fontFamily.serif],
             },
             animation: {
-                'marquee': 'marquee 50s linear infinite',
+                'marquee': 'marquee 80s linear infinite',
             },
             keyframes: {
                 marquee: {

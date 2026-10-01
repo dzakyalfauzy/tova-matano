@@ -18,7 +18,10 @@ class WaterQualityRecordResource extends Resource
 {
     protected static ?string $model = WaterQualityRecord::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-beaker';
+    protected static \UnitEnum|string|null $navigationGroup = 'Kualitas Air';
+    protected static ?string $modelLabel = 'Catatan Kualitas Air';
+    protected static ?string $pluralModelLabel = 'Catatan Kualitas Air';
 
     public static function form(Schema $schema): Schema
     {

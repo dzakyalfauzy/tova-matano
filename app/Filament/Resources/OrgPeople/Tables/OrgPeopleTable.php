@@ -15,7 +15,7 @@ class OrgPeopleTable
     {
         return $table
             ->columns([
-                TextColumn::make('orgCategory.name')
+                TextColumn::make('category.name')
                     ->sortable()
                     ->searchable(),
                 ImageColumn::make('photo_url'),

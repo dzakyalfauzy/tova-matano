@@ -56,10 +56,10 @@ export default function Programs({ programs, settings }) {
                                         <div className="mb-8">
                                             <h3 className="text-sm font-bold text-brand-teal uppercase tracking-wider mb-4">Kegiatan Terkini</h3>
                                             <div className="space-y-3">
-                                                {program.activities.slice(0, 3).map(activity => (
+                                                {program.activities.map(activity => (
                                                     <Link
                                                         key={activity.id}
-                                                        href={`/program/${activity.slug}`}
+                                                        href={`/program/${program.slug}/${activity.slug}`}
                                                         className="flex items-center gap-3 p-3 bg-white rounded-lg hover:bg-brand-teal/5 transition-colors border border-gray-100 group"
                                                     >
                                                         {activity.cover_image_url && (
@@ -83,6 +83,12 @@ export default function Programs({ programs, settings }) {
                                             </div>
                                         </div>
                                     )}
+                                    <Link 
+                                        href={`/program/${program.slug}`}
+                                        className="inline-flex items-center justify-center px-6 py-3 border-2 border-brand-teal text-brand-teal font-bold rounded-lg hover:bg-brand-teal hover:text-white transition-colors w-full sm:w-auto"
+                                    >
+                                        Lihat Semua Proker {program.name} <ChevronRight className="ml-2 h-5 w-5" />
+                                    </Link>
                                 </div>
                             </div>
                         ))

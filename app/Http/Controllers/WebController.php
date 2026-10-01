@@ -13,120 +13,197 @@ use App\Models\OrgCategory;
 use App\Models\Program;
 use App\Models\RunningText;
 use App\Models\SiteSettings;
+use App\Models\Volunteer;
+use App\Mail\VolunteerRegistrationMail;
+use App\Mail\ContactFormMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class WebController extends Controller
 {
+    private function settings()
+    {
+        return SiteSettings::first();
+    }
+
     public function home()
     {
-        $slides = HeroSlide::where('is_active', true)->orderBy('order')->get();
-        $runningTexts = RunningText::where('is_active', true)->orderBy('order')->get();
-        $topMembers = Member::orderByDesc('points')->limit(5)->get();
-        $programs = Program::orderBy('order')->limit(4)->get();
-        $settings = SiteSettings::first();
-        
+        $settings = $this->settings();
+
         return Inertia::render('Home', [
-            'slides' => $slides,
-            'runningTexts' => $runningTexts,
-            'topMembers' => $topMembers,
-            'programs' => $programs,
-            'settings' => $settings,
+            'slides'       => HeroSlide::where('is_active', true)->orderBy('order')->get(),
+            'runningTexts' => RunningText::where('is_active', true)->orderBy('order')->get(),
+            'topMembers'   => Member::orderByDesc('points')->limit(3)->get(),
+            'programs'     => Program::orderBy('order')->limit(4)->get(),
+            'settings'     => $settings,
+            'homeStats'    => [
+                'relawan_aktif'       => Member::count() + Volunteer::where('status', 'ACCEPTED')->count(),
+                'program_terlaksana'  => Program::count(),
+                'sampah_terangkut'    => $settings->stat_sampah_terangkut ?? '2,4T',
+                'sekolah_teredukasi'  => $settings->stat_sekolah_teredukasi ?? '8',
+            ],
         ]);
     }
 
     public function about()
     {
-        $founders = Founder::orderBy('order')->get();
         return Inertia::render('About', [
-            'founders' => $founders,
+            'founders' => Founder::orderBy('order')->get(),
+            'settings' => $this->settings(),
         ]);
     }
 
     public function organization()
     {
-        $categories = OrgCategory::with(['orgPeople' => function ($q) {
-            $q->orderBy('order');
-        }])->orderBy('order')->get();
-
         return Inertia::render('Organization', [
-            'categories' => $categories,
+            'categories' => OrgCategory::with(['people' => fn($q) => $q->orderBy('order')])->orderBy('order')->get(),
+            'settings'   => $this->settings(),
+        ]);
+    }
+
+    public function partnerships()
+    {
+        return Inertia::render('Partnerships', [
+            'partnerships' => \App\Models\Partnership::where('is_active', true)->orderBy('order')->get(),
+            'settings' => $this->settings(),
         ]);
     }
 
     public function members()
     {
-        $members = Member::orderByDesc('points')->get();
         return Inertia::render('Members', [
-            'members' => $members,
+            'members'  => Member::orderByDesc('points')->get(),
+            'settings' => $this->settings(),
         ]);
     }
 
     public function programs()
     {
-        $programs = Program::with(['activities' => function ($q) {
-            $q->where('is_published', true)->orderByDesc('published_at');
-        }])->orderBy('order')->get();
-
         return Inertia::render('Programs', [
-            'programs' => $programs,
+            'programs' => Program::with(['activities' => fn($q) => $q->where('is_published', true)->orderByDesc('published_at')->limit(3)])
+                                 ->orderBy('order')
+                                 ->limit(4)
+                                 ->get(),
+            'settings' => $this->settings(),
         ]);
     }
-    
-    public function programDetail($slug)
+
+    public function programCategory($slug)
     {
-        $activity = Activity::where('slug', $slug)->where('is_published', true)->firstOrFail();
+        $program = Program::where('slug', $slug)->firstOrFail();
+        return Inertia::render('ProgramCategory', [
+            'program' => $program,
+            'activities' => Activity::where('program_id', $program->id)
+                                    ->where('is_published', true)
+                                    ->orderByDesc('published_at')
+                                    ->paginate(12),
+            'settings' => $this->settings(),
+        ]);
+    }
+
+    public function programDetail($program_slug, $activity_slug)
+    {
+        $program = Program::where('slug', $program_slug)->firstOrFail();
         
         return Inertia::render('ProgramDetail', [
-            'activity' => $activity,
+            'program' => $program,
+            'activity' => Activity::where('program_id', $program->id)
+                                  ->where('slug', $activity_slug)
+                                  ->where('is_published', true)
+                                  ->firstOrFail(),
+            'settings' => $this->settings(),
         ]);
     }
 
     public function blog(Request $request)
     {
         $query = BlogPost::where('is_published', true)->orderByDesc('published_at');
-        
-        if ($request->has('category')) {
+        if ($request->filled('category')) {
             $query->where('category', $request->category);
         }
-        
-        $posts = $query->paginate(9);
-        
         return Inertia::render('Blog', [
-            'posts' => $posts,
-            'filters' => $request->only('category'),
+            'posts'    => $query->paginate(9)->withQueryString(),
+            'filters'  => $request->only('category'),
+            'settings' => $this->settings(),
         ]);
     }
-    
+
     public function blogDetail($slug)
     {
-        $post = BlogPost::where('slug', $slug)->where('is_published', true)->firstOrFail();
-        
         return Inertia::render('BlogDetail', [
-            'post' => $post,
+            'post'     => BlogPost::where('slug', $slug)->where('is_published', true)->firstOrFail(),
+            'settings' => $this->settings(),
         ]);
     }
 
     public function gallery()
     {
-        $items = GalleryItem::latest()->paginate(12);
-        
         return Inertia::render('Gallery', [
-            'items' => $items,
+            'items'    => GalleryItem::latest()->paginate(12),
+            'settings' => $this->settings(),
+        ]);
+    }
+
+    public function waterQuality()
+    {
+        return Inertia::render('WaterQuality', [
+            'records'  => \App\Models\WaterQualityRecord::with('samplingPoint')->orderBy('recorded_at')->get(),
+            'samplingPoints' => \App\Models\WaterSamplingPoint::where('is_active', true)->get(),
+            'settings' => $this->settings(),
         ]);
     }
 
     public function joinAndDonate()
     {
-        $channels = DonationChannel::where('is_active', true)->get();
-        
         return Inertia::render('JoinDonate', [
-            'donationChannels' => $channels,
+            'donationChannels' => DonationChannel::where('is_active', true)->get(),
+            'settings'         => $this->settings(),
         ]);
+    }
+
+    public function submitVolunteer(Request $request)
+    {
+        $validated = $request->validate([
+            'full_name'  => 'required|string|max:255',
+            'email'      => 'required|email|max:255',
+            'phone'      => 'required|string|max:20',
+            'address'    => 'nullable|string|max:500',
+            'motivation' => 'nullable|string|max:2000',
+        ]);
+
+        $code = strtoupper(Str::random(3) . '-' . Str::random(4) . '-' . Str::random(3));
+
+        Volunteer::create(array_merge($validated, [
+            'registration_code' => $code,
+            'status'            => 'PENDING',
+            'submitted_at'      => now(),
+        ]));
+
+        Mail::to($validated['email'])->send(new VolunteerRegistrationMail($validated['full_name'], $code));
+
+        return redirect()->back()->with('registration_code', $code);
     }
 
     public function contact()
     {
-        return Inertia::render('Contact');
+        return Inertia::render('Contact', [
+            'settings' => $this->settings(),
+        ]);
+    }
+
+    public function submitContact(Request $request)
+    {
+        $request->validate([
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|email|max:255',
+            'message' => 'required|string|max:3000',
+        ]);
+
+        $adminEmail = config('mail.from.address', 'admin@tovamatano.org');
+        Mail::to($adminEmail)->send(new ContactFormMail($request->name, $request->email, $request->message));
+
+        return redirect()->back()->with('success', true);
     }
 }

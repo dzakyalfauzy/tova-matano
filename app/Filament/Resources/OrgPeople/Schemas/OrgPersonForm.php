@@ -14,7 +14,7 @@ class OrgPersonForm
         return $schema
             ->components([
                 Select::make('org_category_id')
-                    ->relationship('orgCategory', 'name')
+                    ->relationship('category', 'name')
                     ->required(),
                 TextInput::make('name'),
                 TextInput::make('role_title')

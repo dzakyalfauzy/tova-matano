@@ -1,9 +1,10 @@
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Head, Link } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Trophy, Medal } from 'lucide-react';
+import AboutSnippet from '@/Components/Public/AboutSnippet';
 
-export default function Home({ slides, runningTexts, topMembers, programs, settings }) {
+export default function Home({ slides, runningTexts, topMembers, programs, settings, homeStats }) {
     console.log("Slides Data:", slides);
     
     // Simple Slider State
@@ -13,7 +14,7 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
         if (!slides || slides.length <= 1) return;
         const timer = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % slides.length);
-        }, 5000);
+        }, 8000);
         return () => clearInterval(timer);
     }, [slides]);
 
@@ -28,6 +29,15 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
     return (
         <PublicLayout settings={settings}>
             <Head title="Beranda" />
+
+            {/* Static Title Header above the slider */}
+            {slides && slides.length > 0 && (
+                <div className="absolute top-20 left-0 right-0 z-40 pointer-events-none text-center px-4 pt-16">
+                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-4 drop-shadow-md">
+                        {slides[0]?.title}
+                    </h1>
+                </div>
+            )}
 
             {/* Hero Slider Area */}
             {slides && slides.length > 0 ? (
@@ -45,12 +55,7 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
                                 alt={slide.title}
                                 className="object-cover w-full h-full"
                             />
-                            <div className="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4">
-                                {slide.title && (
-                                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-4 drop-shadow-md">
-                                        {slide.title}
-                                    </h1>
-                                )}
+                            <div className="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 pt-20">
                                 {slide.subtitle && (
                                     <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl drop-shadow">
                                         {slide.subtitle}
@@ -59,7 +64,7 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
                                 {slide.cta_label && slide.cta_url && (
                                     <a
                                         href={slide.cta_url}
-                                        className="px-8 py-3 bg-brand-gold text-brand-navy font-bold rounded hover:bg-amber-400 transition-colors shadow-lg"
+                                        className="px-8 py-3 bg-brand-gold text-brand-navy font-bold rounded hover:bg-amber-400 transition-colors shadow-lg pointer-events-auto"
                                     >
                                         {slide.cta_label}
                                     </a>
@@ -113,20 +118,23 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
                 <div className="bg-brand-navy border-y border-brand-gold/30 text-brand-gold py-3 overflow-hidden flex whitespace-nowrap group">
                     <div className="animate-marquee flex gap-12 pr-12 group-hover:[animation-play-state:paused]">
                         {/* Render teks */}
-                        <p className="font-medium text-sm tracking-widest uppercase">
-                            {runningTexts.map(text => text.text).join('   ✦   ')}
+                        <p className="font-bold text-lg tracking-widest uppercase">
+                            {runningTexts.map(text => text.text).join('   •   ')}
                         </p>
                         {/* Copy pertama supaya mulus */}
-                        <p className="font-medium text-sm tracking-widest uppercase">
-                            {runningTexts.map(text => text.text).join('   ✦   ')}
+                        <p className="font-bold text-lg tracking-widest uppercase">
+                            {runningTexts.map(text => text.text).join('   •   ')}
                         </p>
                         {/* Copy kedua supaya super mulus di layar ultra wide */}
-                        <p className="font-medium text-sm tracking-widest uppercase">
-                            {runningTexts.map(text => text.text).join('   ✦   ')}
+                        <p className="font-bold text-lg tracking-widest uppercase">
+                            {runningTexts.map(text => text.text).join('   •   ')}
                         </p>
                     </div>
                 </div>
             )}
+
+            {/* ===== SECTION: Tentang Kami Snippet ===== */}
+            <AboutSnippet homeStats={homeStats} />
 
             {/* Portal Keanggotaan (Top Members) */}
             <div className="bg-white py-16 border-b border-gray-100">
@@ -136,38 +144,80 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
                         <p className="text-gray-600 max-w-2xl mx-auto">Kenali pahlawan lingkungan kami yang paling aktif berkontribusi untuk kelestarian Danau Matano.</p>
                     </div>
                     
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                        {topMembers && topMembers.length > 0 ? (
-                            topMembers.map(member => (
-                                <div key={member.id} className="flex flex-col items-center text-center p-4 bg-brand-paper rounded-lg shadow-sm">
-                                    <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-4 border-brand-teal">
-                                        {member.photo_url ? (
-                                            <img src={`/storage/${member.photo_url}`} alt={member.name} className="w-full h-full object-cover" />
+                    <div className="flex flex-wrap justify-center gap-6 items-end">
+                        {topMembers && topMembers.length >= 3 ? (
+                            <>
+                                {/* Rank 2 */}
+                                <div className="relative flex flex-col items-center flex-1 max-w-[200px] text-center p-4">
+                                    <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-gray-300 mb-3 bg-white z-10 relative">
+                                        {topMembers[1].photo_url ? (
+                                            <img src={`/storage/${topMembers[1].photo_url}`} alt={topMembers[1].name} className="w-full h-full object-cover" />
                                         ) : (
-                                            <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-xl">
-                                                {member.name.charAt(0)}
+                                            <div className="w-full h-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-500">
+                                                {topMembers[1].name.charAt(0)}
                                             </div>
                                         )}
+                                        <div className="absolute -top-2 -right-2 bg-gray-400 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border-2 border-white shadow-sm">2</div>
                                     </div>
-                                    <h3 className="font-bold text-brand-navy mb-1">{member.name}</h3>
-                                    <span className="inline-block px-2 py-1 bg-brand-gold/20 text-brand-gold text-xs font-bold rounded-full mb-2">
-                                        {member.points} Poin
-                                    </span>
-                                    {member.divisi_name && (
-                                        <p className="text-xs text-gray-500 uppercase tracking-wide">{member.divisi_name}</p>
-                                    )}
+                                    <h3 className="font-bold text-brand-navy mb-1 text-sm">{topMembers[1].name}</h3>
+                                    <span className="text-xs font-bold text-gray-500 mb-2">{topMembers[1].points} poin</span>
+                                    <div className="w-full bg-gray-200 rounded-t-xl h-24 flex items-center justify-center shadow-inner relative overflow-hidden">
+                                        <div className="absolute inset-0 opacity-10 bg-[url('/image/pattern.svg')]"></div>
+                                        <Medal className="h-10 w-10 text-gray-400 drop-shadow" />
+                                    </div>
                                 </div>
-                            ))
+
+                                {/* Rank 1 */}
+                                <div className="relative flex flex-col items-center flex-1 max-w-[220px] text-center p-4">
+                                    <Trophy className="h-10 w-10 text-yellow-500 mb-2 animate-bounce" />
+                                    <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-yellow-400 mb-3 bg-white z-10 relative shadow-lg">
+                                        {topMembers[0].photo_url ? (
+                                            <img src={`/storage/${topMembers[0].photo_url}`} alt={topMembers[0].name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full bg-yellow-50 flex items-center justify-center text-4xl font-bold text-yellow-600">
+                                                {topMembers[0].name.charAt(0)}
+                                            </div>
+                                        )}
+                                        <div className="absolute -top-2 -right-2 bg-yellow-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 border-white shadow-md">1</div>
+                                    </div>
+                                    <h3 className="font-bold text-brand-navy mb-1 text-lg">{topMembers[0].name}</h3>
+                                    <span className="text-sm font-bold text-brand-gold mb-2">{topMembers[0].points} poin</span>
+                                    <div className="w-full bg-gradient-to-b from-brand-gold/80 to-brand-gold rounded-t-xl h-36 flex flex-col items-center justify-center shadow-inner relative overflow-hidden">
+                                        <div className="absolute inset-0 opacity-20 bg-[url('/image/pattern.svg')]"></div>
+                                        <Trophy className="h-12 w-12 text-white drop-shadow-md" />
+                                    </div>
+                                </div>
+
+                                {/* Rank 3 */}
+                                <div className="relative flex flex-col items-center flex-1 max-w-[200px] text-center p-4">
+                                    <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-amber-600 mb-3 bg-white z-10 relative">
+                                        {topMembers[2].photo_url ? (
+                                            <img src={`/storage/${topMembers[2].photo_url}`} alt={topMembers[2].name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full bg-amber-50 flex items-center justify-center text-2xl font-bold text-amber-700">
+                                                {topMembers[2].name.charAt(0)}
+                                            </div>
+                                        )}
+                                        <div className="absolute -top-2 -right-2 bg-amber-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border-2 border-white shadow-sm">3</div>
+                                    </div>
+                                    <h3 className="font-bold text-brand-navy mb-1 text-sm">{topMembers[2].name}</h3>
+                                    <span className="text-xs font-bold text-gray-500 mb-2">{topMembers[2].points} poin</span>
+                                    <div className="w-full bg-amber-100 rounded-t-xl h-20 flex items-center justify-center shadow-inner relative overflow-hidden">
+                                        <div className="absolute inset-0 opacity-10 bg-[url('/image/pattern.svg')]"></div>
+                                        <Medal className="h-10 w-10 text-amber-600 drop-shadow" />
+                                    </div>
+                                </div>
+                            </>
                         ) : (
-                            <div className="col-span-full text-center text-gray-500">
-                                Belum ada data anggota.
+                            <div className="w-full text-center py-8 text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                                Belum ada data anggota yang cukup.
                             </div>
                         )}
                     </div>
                     
-                    <div className="mt-10 text-center">
-                        <Link href="/anggota" className="text-brand-teal font-semibold hover:text-brand-navy transition-colors flex items-center justify-center gap-1">
-                            Lihat Semua Anggota <ChevronRight size={16} />
+                    <div className="mt-12 text-center">
+                        <Link href="/anggota" className="inline-flex items-center justify-center px-6 py-3 border-2 border-brand-teal text-brand-teal font-bold rounded-lg hover:bg-brand-teal hover:text-white transition-colors">
+                            Lihat Semua Anggota <ChevronRight size={20} className="ml-2" />
                         </Link>
                     </div>
                 </div>

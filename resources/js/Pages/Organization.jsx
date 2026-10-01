@@ -71,14 +71,50 @@ export default function Organization({ categories, settings }) {
             <Head title="Struktur Organisasi" />
 
             {/* Page Header */}
-            <div className="bg-brand-navy py-16 md:py-24 text-center border-b-4 border-brand-teal">
-                <div className="max-w-4xl mx-auto px-4">
-                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-gold mb-6">Struktur Organisasi</h1>
-                    <p className="text-xl text-gray-200">
+            <div className="relative bg-brand-navy py-16 md:py-32 text-center border-b-4 border-brand-teal overflow-hidden">
+                <div className="absolute inset-0 z-0">
+                    {settings?.org_hero_image_url ? (
+                        <img 
+                            src={`/storage/${settings.org_hero_image_url}`} 
+                            alt="Background Struktur Organisasi" 
+                            className="w-full h-full object-cover opacity-30"
+                        />
+                    ) : (
+                        <img 
+                            src="/image/logo_tova_matano.png" 
+                            alt="Background Struktur Organisasi" 
+                            className="w-full h-full object-cover opacity-10"
+                        />
+                    )}
+                    <div className="absolute inset-0 bg-brand-navy/80 mix-blend-multiply"></div>
+                </div>
+                <div className="max-w-4xl mx-auto px-4 relative z-10">
+                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-gold mb-6 drop-shadow-md">Struktur Organisasi</h1>
+                    <p className="text-xl md:text-2xl text-gray-200 drop-shadow">
                         Mengenal lebih dekat para penggerak di balik roda perjuangan Tova Matano Care Center.
                     </p>
                 </div>
             </div>
+
+            {/* Bagan Organisasi (Visual Chart) */}
+            {settings?.org_chart_image_url && (
+                <div className="bg-white py-16 border-b border-gray-200">
+                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-10">
+                            <h2 className="text-3xl font-heading font-bold text-brand-navy mb-4">Bagan Organisasi</h2>
+                            <div className="w-24 h-1 bg-brand-teal mx-auto"></div>
+                        </div>
+                        <div className="bg-brand-paper p-4 md:p-8 rounded-2xl border border-gray-100 shadow-inner flex justify-center">
+                            <img 
+                                src={`/storage/${settings.org_chart_image_url}`} 
+                                alt="Bagan Organisasi TMCC" 
+                                className="max-w-full h-auto rounded-xl shadow-sm hover:scale-[1.02] transition-transform duration-500 cursor-zoom-in"
+                                onClick={() => window.open(`/storage/${settings.org_chart_image_url}`, '_blank')}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Content Area */}
             <div className="py-16 md:py-24 bg-brand-paper">
@@ -115,9 +151,9 @@ export default function Organization({ categories, settings }) {
                                                 leaveTo="transform scale-95 opacity-0"
                                             >
                                                 <Disclosure.Panel className="px-6 pb-6 pt-2">
-                                                    {category.org_people && category.org_people.length > 0 ? (
+                                                    {category.people && category.people.length > 0 ? (
                                                         <div className={category.display_type === 'PERSON_GRID' ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pt-4" : "flex flex-col gap-1 pt-2"}>
-                                                            {category.org_people.map(person => renderPersonCard(person, category.display_type))}
+                                                            {category.people.map(person => renderPersonCard(person, category.display_type))}
                                                         </div>
                                                     ) : (
                                                         <div className="text-center py-8 text-gray-400 bg-gray-50 rounded-lg border border-dashed border-gray-200">

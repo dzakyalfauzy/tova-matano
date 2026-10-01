@@ -10,7 +10,9 @@ export default function Navigation() {
         { name: 'Beranda', href: '/' },
         { name: 'Tentang TMCC', href: '/tentang' },
         { name: 'Struktur Organisasi', href: '/struktur-organisasi' },
+        { name: 'Partnership', href: '/partnership' },
         { name: 'Program', href: '/program' },
+        { name: 'Kualitas Air', href: '/kualitas-air' },
         { name: 'Blog', href: '/blog' },
         { name: 'Kontak', href: '/kontak' },
     ];

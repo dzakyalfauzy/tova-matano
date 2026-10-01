@@ -32,6 +32,10 @@ class MembersTable
             ->recordActions([
                 EditAction::make(),
             ])
+            ->headerActions([
+                \Filament\Tables\Actions\ExportAction::make()
+                    ->exporter(\App\Filament\Exports\MemberExporter::class),
+            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

@@ -25,8 +25,39 @@ export default function About({ founders, settings }) {
                 </div>
             </div>
 
-            {/* Profil & Sejarah */}
+            {/* Latar Belakang Danau Matano */}
             <div className="py-16 md:py-24 bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                        <div className="order-2 lg:order-1 relative">
+                            <div className="absolute inset-0 bg-brand-teal rounded-2xl transform -translate-x-4 translate-y-4"></div>
+                            <img 
+                                src="/image/danau-matano.jpg" 
+                                alt="Danau Matano" 
+                                onError={(e) => { e.target.src = '/image/logo_tova_matano.png'; e.target.className = 'relative rounded-2xl shadow-xl w-full h-auto object-contain bg-white p-8 aspect-[4/3] z-10' }}
+                                className="relative rounded-2xl shadow-xl w-full h-auto object-cover aspect-[4/3] z-10"
+                            />
+                        </div>
+                        <div className="order-1 lg:order-2">
+                            <h2 className="text-3xl font-heading font-bold text-brand-navy mb-6">Latar Belakang Danau Matano</h2>
+                            <div className="prose prose-lg text-gray-600 prose-a:text-brand-teal">
+                                <p>
+                                    Danau Matano merupakan danau tektonik purba terdalam di Indonesia dan Asia Tenggara, serta terdalam ke-8 di dunia. Danau ini terletak di Kabupaten Luwu Timur, Sulawesi Selatan, dengan kedalaman maksimal mencapai sekitar 590 meter.
+                                </p>
+                                <p>
+                                    Sebagai "Danau Purba", Matano memiliki keanekaragaman hayati endemik yang luar biasa, termasuk ikan-ikan unik dan biota air tawar yang tidak ditemukan di tempat lain di dunia. Kualitas airnya yang jernih dan ekosistem yang rapuh membuatnya sangat penting untuk dilestarikan.
+                                </p>
+                                <p>
+                                    Ancaman terhadap kelestarian Danau Matano terus meningkat seiring dengan aktivitas manusia, mulai dari pencemaran, limbah domestik, hingga dampak perubahan iklim. Oleh karena itu, langkah nyata untuk menjaga dan memulihkan kondisi danau ini menjadi sangat krusial.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Profil & Sejarah */}
+            <div className="py-16 md:py-24 bg-brand-paper">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div>
@@ -59,7 +90,7 @@ export default function About({ founders, settings }) {
             </div>
 
             {/* Visi, Misi, Tujuan */}
-            <div className="py-16 md:py-24 bg-brand-paper">
+            <div className="py-16 md:py-24 bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl font-heading font-bold text-brand-navy mb-4">Visi, Misi & Tujuan</h2>
@@ -115,7 +146,7 @@ export default function About({ founders, settings }) {
             </div>
 
             {/* Founders Section */}
-            <div className="py-16 md:py-24 bg-white">
+            <div className="py-16 md:py-24 bg-brand-paper">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl font-heading font-bold text-brand-navy mb-4">Dewan Pendiri</h2>

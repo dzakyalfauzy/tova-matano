@@ -31,14 +31,20 @@ class BlogPostForm
                         'RILIS_PERS' => 'Rilis Pers',
                         'BERITA' => 'Berita',
                         'KEBIJAKAN' => 'Kebijakan',
+                        'BASELINE_STUDY' => 'Baseline Study',
                     ])
                     ->required(),
                 FileUpload::make('cover_image_url')
                     ->image()
                     ->disk('public')
                     ->directory('blog-posts'),
+                FileUpload::make('pdf_url')
+                    ->label('Upload File PDF (Opsional)')
+                    ->acceptedFileTypes(['application/pdf'])
+                    ->disk('public')
+                    ->directory('blog-pdfs'),
                 RichEditor::make('content')
-                    ->required()
+                    ->label('Konten Tulisan (Kosongkan jika hanya ingin menampilkan PDF)')
                     ->columnSpanFull(),
                 DateTimePicker::make('published_at')
                     ->default(now())

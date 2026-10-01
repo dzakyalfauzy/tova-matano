@@ -13,6 +13,11 @@ class WaterQualityRecordForm
     {
         return $schema
             ->components([
+                \Filament\Forms\Components\Select::make('water_sampling_point_id')
+                    ->relationship('samplingPoint', 'name')
+                    ->required()
+                    ->searchable()
+                    ->preload(),
                 DateTimePicker::make('recorded_at')
                     ->default(now())
                     ->required(),

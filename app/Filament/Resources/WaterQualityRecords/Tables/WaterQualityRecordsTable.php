@@ -17,6 +17,10 @@ class WaterQualityRecordsTable
                 TextColumn::make('recorded_at')
                     ->dateTime()
                     ->sortable(),
+                TextColumn::make('samplingPoint.name')
+                    ->label('Titik Sample')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('ph')
                     ->numeric()
                     ->sortable(),
@@ -40,6 +44,10 @@ class WaterQualityRecordsTable
             ])
             ->recordActions([
                 EditAction::make(),
+            ])
+            ->headerActions([
+                \Filament\Tables\Actions\ExportAction::make()
+                    ->exporter(\App\Filament\Exports\WaterQualityRecordExporter::class),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
