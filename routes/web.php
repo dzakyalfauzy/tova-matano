@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WebController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+
+Route::post('/locale', [LocaleController::class, 'switch'])->name('locale.switch');
 
 // Public Routes based on PRD Sitemap
 Route::get('/', [WebController::class, 'home'])->name('home');

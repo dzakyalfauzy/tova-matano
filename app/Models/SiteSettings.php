@@ -12,7 +12,7 @@ class SiteSettings extends Model
     protected $fillable = [
         'address', 'phone', 'whatsapp', 'email',
         'instagram_url', 'facebook_url', 'tiktok_url', 'twitter_url',
-        'about_hero_image_url', 'org_hero_image_url', 'org_chart_image_url',
+        'about_hero_image_url', 'about_lake_image_url', 'org_hero_image_url', 'org_chart_image_url',
         'stat_sampah_terangkut', 'stat_sekolah_teredukasi',
     ];
 }

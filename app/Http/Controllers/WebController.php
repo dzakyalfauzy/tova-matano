@@ -119,14 +119,22 @@ class WebController extends Controller
 
     public function blog(Request $request)
     {
-        $query = BlogPost::where('is_published', true)->orderByDesc('published_at');
+        $query = BlogPost::where('is_published', true)
+            ->where('category', '!=', 'BASELINE_STUDY')
+            ->orderByDesc('published_at');
+
         if ($request->filled('category')) {
             $query->where('category', $request->category);
         }
+
         return Inertia::render('Blog', [
-            'posts'    => $query->paginate(9)->withQueryString(),
-            'filters'  => $request->only('category'),
-            'settings' => $this->settings(),
+            'posts'              => $query->paginate(9)->withQueryString(),
+            'filters'            => $request->only('category'),
+            'baselineStudyPosts' => BlogPost::where('is_published', true)
+                ->where('category', 'BASELINE_STUDY')
+                ->orderByDesc('published_at')
+                ->get(),
+            'settings'           => $this->settings(),
         ]);
     }
 

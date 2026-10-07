@@ -5,8 +5,8 @@ namespace App\Filament\Resources\HeroSlides\Schemas;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
-use Filament\Forms\Components\Tabs;
 
 class HeroSlideForm
 {
@@ -24,7 +24,7 @@ class HeroSlideForm
                 Toggle::make('is_active')
                     ->default(true)
                     ->required(),
-                
+
                 Tabs::make('Translations')
                     ->tabs([
                         Tabs\Tab::make('Indonesian (ID)')

@@ -1,11 +1,13 @@
 import PublicLayout from '@/Layouts/PublicLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { ChevronRight } from 'lucide-react';
 
 export default function About({ founders, settings }) {
+    const { props: { translations: t } } = usePage();
+
     return (
         <PublicLayout settings={settings}>
-            <Head title="Tentang TMCC" />
+            <Head title={t.about_title} />
 
             {/* Page Header */}
             <div className="relative bg-brand-navy py-16 md:py-32 text-center border-b-4 border-brand-teal overflow-hidden">
@@ -18,9 +20,9 @@ export default function About({ founders, settings }) {
                     <div className="absolute inset-0 bg-brand-navy/80 mix-blend-multiply"></div>
                 </div>
                 <div className="max-w-4xl mx-auto px-4 relative z-10">
-                    <h1 className="text-4xl md:text-6xl font-heading font-bold text-brand-gold mb-6 drop-shadow-md">Tentang Kami</h1>
+                    <h1 className="text-4xl md:text-6xl font-heading font-bold text-brand-gold mb-6 drop-shadow-md">{t.about_title}</h1>
                     <p className="text-xl md:text-2xl text-gray-200 drop-shadow">
-                        Membangun masa depan yang berkelanjutan untuk Danau Matano, satu tindakan pada satu waktu.
+                        {t.about_subtitle}
                     </p>
                 </div>
             </div>
@@ -32,14 +34,14 @@ export default function About({ founders, settings }) {
                         <div className="order-2 lg:order-1 relative">
                             <div className="absolute inset-0 bg-brand-teal rounded-2xl transform -translate-x-4 translate-y-4"></div>
                             <img 
-                                src="/image/danau-matano.jpg" 
+                                src={settings?.about_lake_image_url ? `/storage/${settings.about_lake_image_url}` : "/image/danau-matano.jpg"} 
                                 alt="Danau Matano" 
                                 onError={(e) => { e.target.src = '/image/logo_tova_matano.png'; e.target.className = 'relative rounded-2xl shadow-xl w-full h-auto object-contain bg-white p-8 aspect-[4/3] z-10' }}
                                 className="relative rounded-2xl shadow-xl w-full h-auto object-cover aspect-[4/3] z-10"
                             />
                         </div>
                         <div className="order-1 lg:order-2">
-                            <h2 className="text-3xl font-heading font-bold text-brand-navy mb-6">Latar Belakang Danau Matano</h2>
+                            <h2 className="text-3xl font-heading font-bold text-brand-navy mb-6">{t.lake_background}</h2>
                             <div className="prose prose-lg text-gray-600 prose-a:text-brand-teal">
                                 <p>
                                     Danau Matano merupakan danau tektonik purba terdalam di Indonesia dan Asia Tenggara, serta terdalam ke-8 di dunia. Danau ini terletak di Kabupaten Luwu Timur, Sulawesi Selatan, dengan kedalaman maksimal mencapai sekitar 590 meter.
@@ -61,7 +63,7 @@ export default function About({ founders, settings }) {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div>
-                            <h2 className="text-3xl font-heading font-bold text-brand-navy mb-6">Profil & Sejarah</h2>
+                            <h2 className="text-3xl font-heading font-bold text-brand-navy mb-6">{t.profile_history}</h2>
                             <div className="prose prose-lg text-gray-600 prose-a:text-brand-teal">
                                 <p>
                                     <strong>Tova Matano Care Center (TMCC)</strong> lahir dari kepedulian mendalam terhadap kelestarian Danau Matano, jantung kehidupan masyarakat Luwu Timur. Berawal dari gerakan komunitas kecil pada tahun 2018 yang rutin melakukan aksi bersih-bersih tepi danau, gerakan ini berevolusi menjadi lembaga resmi yang berkomitmen pada restorasi dan edukasi lingkungan jangka panjang.
@@ -93,7 +95,7 @@ export default function About({ founders, settings }) {
             <div className="py-16 md:py-24 bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl font-heading font-bold text-brand-navy mb-4">Visi, Misi & Tujuan</h2>
+                        <h2 className="text-3xl font-heading font-bold text-brand-navy mb-4">{t.vision}, {t.mission} & {t.goal}</h2>
                         <div className="w-24 h-1 bg-brand-teal mx-auto"></div>
                     </div>
 
@@ -103,7 +105,7 @@ export default function About({ founders, settings }) {
                             <div className="w-16 h-16 bg-brand-teal/10 rounded-full flex items-center justify-center mx-auto mb-6">
                                 <span className="text-2xl font-bold text-brand-teal">V</span>
                             </div>
-                            <h3 className="text-xl font-bold text-brand-navy mb-4">Visi</h3>
+                            <h3 className="text-xl font-bold text-brand-navy mb-4">{t.vision}</h3>
                             <p className="text-gray-600">
                                 Menjadi pusat unggulan dalam pelestarian ekosistem perairan darat tropis dan inspirasi global untuk penyelamatan danau-danau tektonik.
                             </p>
@@ -114,7 +116,7 @@ export default function About({ founders, settings }) {
                             <div className="w-16 h-16 bg-brand-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
                                 <span className="text-2xl font-bold text-brand-gold">M</span>
                             </div>
-                            <h3 className="text-xl font-bold text-brand-navy mb-4">Misi</h3>
+                            <h3 className="text-xl font-bold text-brand-navy mb-4">{t.mission}</h3>
                             <ul className="text-gray-600 text-left space-y-3">
                                 <li className="flex items-start">
                                     <ChevronRight className="h-5 w-5 text-brand-gold shrink-0 mt-0.5" />
@@ -136,7 +138,7 @@ export default function About({ founders, settings }) {
                             <div className="w-16 h-16 bg-brand-navy/10 rounded-full flex items-center justify-center mx-auto mb-6">
                                 <span className="text-2xl font-bold text-brand-navy">T</span>
                             </div>
-                            <h3 className="text-xl font-bold text-brand-navy mb-4">Tujuan</h3>
+                            <h3 className="text-xl font-bold text-brand-navy mb-4">{t.goal}</h3>
                             <p className="text-gray-600">
                                 Mewujudkan Danau Matano yang bersih, sehat, dan lestari selambatnya pada tahun 2035 melalui kolaborasi pentahelix (Pemerintah, Akademisi, Komunitas, Bisnis, Media).
                             </p>
@@ -149,7 +151,7 @@ export default function About({ founders, settings }) {
             <div className="py-16 md:py-24 bg-brand-paper">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl font-heading font-bold text-brand-navy mb-4">Dewan Pendiri</h2>
+                        <h2 className="text-3xl font-heading font-bold text-brand-navy mb-4">{t.founders}</h2>
                         <p className="text-gray-600 max-w-2xl mx-auto">Merekalah yang meletakkan batu pertama perjuangan pelestarian Danau Matano.</p>
                     </div>
 

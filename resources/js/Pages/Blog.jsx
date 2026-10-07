@@ -1,6 +1,6 @@
 import PublicLayout from '@/Layouts/PublicLayout';
-import { Head, Link, router } from '@inertiajs/react';
-import { Calendar, Tag } from 'lucide-react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Calendar, FileText, Tag } from 'lucide-react';
 
 const CATEGORIES = [
     { value: '', label: 'Semua' },
@@ -8,7 +8,6 @@ const CATEGORIES = [
     { value: 'RILIS_PERS', label: 'Rilis Pers' },
     { value: 'BERITA', label: 'Berita' },
     { value: 'KEBIJAKAN', label: 'Kebijakan' },
-    { value: 'BASELINE_STUDY', label: 'Baseline Study' },
 ];
 
 const CATEGORY_COLORS = {
@@ -19,7 +18,57 @@ const CATEGORY_COLORS = {
     BASELINE_STUDY: 'bg-brand-gold/20 text-brand-navy border border-brand-gold/30',
 };
 
-export default function Blog({ posts, filters, settings }) {
+function PostCard({ post }) {
+    return (
+        <Link
+            href={`/blog/${post.slug}`}
+            className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all border border-gray-100 flex flex-col"
+        >
+            {/* Cover */}
+            <div className="h-48 bg-gray-100 overflow-hidden relative">
+                {post.cover_image_url ? (
+                    <img
+                        src={`/storage/${post.cover_image_url}`}
+                        alt={post.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-brand-teal/5">
+                        <Tag className="h-12 w-12 text-brand-teal/20" />
+                    </div>
+                )}
+                {post.category && (
+                    <span className={`absolute top-3 left-3 px-2.5 py-1 text-xs font-bold rounded-full ${CATEGORY_COLORS[post.category] || 'bg-gray-100 text-gray-600'}`}>
+                        {CATEGORIES.find(c => c.value === post.category)?.label || post.category}
+                    </span>
+                )}
+                {post.pdf_url && (
+                    <span className="absolute top-3 right-3 px-2 py-1 text-xs font-bold rounded-full bg-red-100 text-red-700 flex items-center gap-1">
+                        <FileText className="h-3 w-3" /> PDF
+                    </span>
+                )}
+            </div>
+
+            {/* Content */}
+            <div className="p-6 flex flex-col flex-grow">
+                <h2 className="font-heading font-bold text-brand-navy text-lg mb-3 line-clamp-2 group-hover:text-brand-teal transition-colors">
+                    {post.title}
+                </h2>
+                <div className="flex items-center gap-2 text-gray-400 text-xs mt-auto pt-4 border-t border-gray-50">
+                    <Calendar className="h-3.5 w-3.5" />
+                    <span>
+                        {new Date(post.published_at).toLocaleDateString('id-ID', {
+                            day: 'numeric', month: 'long', year: 'numeric',
+                        })}
+                    </span>
+                </div>
+            </div>
+        </Link>
+    );
+}
+
+export default function Blog({ posts, filters, baselineStudyPosts, settings }) {
+    const { props: { translations: t } } = usePage();
     const activeCategory = filters?.category || '';
 
     const filterByCategory = (cat) => {
@@ -28,16 +77,17 @@ export default function Blog({ posts, filters, settings }) {
 
     return (
         <PublicLayout settings={settings}>
-            <Head title="Tova Blog" />
+            <Head title={t.blog_title} />
 
             {/* Header */}
             <div className="bg-brand-navy py-16 md:py-24 text-center border-b-4 border-brand-teal">
                 <div className="max-w-4xl mx-auto px-4">
-                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-gold mb-4">Tova Blog</h1>
-                    <p className="text-xl text-gray-200">Edukasi, rilis pers, dan kabar terbaru dari lapangan.</p>
+                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-gold mb-4">{t.blog_title}</h1>
+                    <p className="text-xl text-gray-200">{t.blog_subtitle}</p>
                 </div>
             </div>
 
+            {/* Main Blog Section */}
             <div className="bg-brand-paper py-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -62,46 +112,7 @@ export default function Blog({ posts, filters, settings }) {
                     {posts?.data && posts.data.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {posts.data.map(post => (
-                                <Link
-                                    key={post.id}
-                                    href={`/blog/${post.slug}`}
-                                    className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all border border-gray-100 flex flex-col"
-                                >
-                                    {/* Cover */}
-                                    <div className="h-48 bg-gray-100 overflow-hidden relative">
-                                        {post.cover_image_url ? (
-                                            <img
-                                                src={`/storage/${post.cover_image_url}`}
-                                                alt={post.title}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-brand-teal/5">
-                                                <Tag className="h-12 w-12 text-brand-teal/20" />
-                                            </div>
-                                        )}
-                                        {post.category && (
-                                            <span className={`absolute top-3 left-3 px-2.5 py-1 text-xs font-bold rounded-full ${CATEGORY_COLORS[post.category] || 'bg-gray-100 text-gray-600'}`}>
-                                                {CATEGORIES.find(c => c.value === post.category)?.label || post.category}
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    {/* Content */}
-                                    <div className="p-6 flex flex-col flex-grow">
-                                        <h2 className="font-heading font-bold text-brand-navy text-lg mb-3 line-clamp-2 group-hover:text-brand-teal transition-colors">
-                                            {post.title}
-                                        </h2>
-                                        <div className="flex items-center gap-2 text-gray-400 text-xs mt-auto pt-4 border-t border-gray-50">
-                                            <Calendar className="h-3.5 w-3.5" />
-                                            <span>
-                                                {new Date(post.published_at).toLocaleDateString('id-ID', {
-                                                    day: 'numeric', month: 'long', year: 'numeric'
-                                                })}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </Link>
+                                <PostCard key={post.id} post={post} />
                             ))}
                         </div>
                     ) : (
@@ -132,6 +143,32 @@ export default function Blog({ posts, filters, settings }) {
                     )}
                 </div>
             </div>
+
+            {/* Baseline Study Section */}
+            {baselineStudyPosts && baselineStudyPosts.length > 0 && (
+                <div className="bg-white py-16 border-t-4 border-brand-gold">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-12">
+                            <span className="inline-block px-4 py-1.5 bg-brand-gold/20 text-brand-navy text-sm font-bold rounded-full border border-brand-gold/30 mb-4">
+                                Baseline Study
+                            </span>
+                            <h2 className="text-3xl font-heading font-bold text-brand-navy mb-3">
+                                {t.baseline_study}
+                            </h2>
+                            <p className="text-gray-500 max-w-xl mx-auto">
+                                {t.baseline_desc}
+                            </p>
+                            <div className="w-24 h-1 bg-brand-gold mx-auto mt-6"></div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {baselineStudyPosts.map(post => (
+                                <PostCard key={post.id} post={post} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </PublicLayout>
     );
 }

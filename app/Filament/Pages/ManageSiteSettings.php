@@ -3,22 +3,24 @@
 namespace App\Filament\Pages;
 
 use App\Models\SiteSettings;
-use Filament\Forms\Components\TextInput;
+use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Notifications\Notification;
+use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Filament\Pages\Page;
-use Filament\Actions\Action;
-use Filament\Notifications\Notification;
-use Filament\Forms\Concerns\InteractsWithForms;
-use BackedEnum;
 
 class ManageSiteSettings extends Page
 {
     use InteractsWithForms;
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
+
     protected string $view = 'filament.pages.manage-site-settings';
+
     public ?array $data = [];
 
     public function mount(): void
@@ -47,6 +49,11 @@ class ManageSiteSettings extends Page
                     ->schema([
                         FileUpload::make('about_hero_image_url')
                             ->label('Background Image Halaman Tentang Kami')
+                            ->image()
+                            ->disk('public')
+                            ->directory('settings'),
+                        FileUpload::make('about_lake_image_url')
+                            ->label('Foto Danau Matano (Section Latar Belakang)')
                             ->image()
                             ->disk('public')
                             ->directory('settings'),
