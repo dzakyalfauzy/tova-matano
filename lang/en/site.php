@@ -8,7 +8,7 @@ return [
     'nav_partnership'  => 'Partnership',
     'nav_program'      => 'Programs',
     'nav_water'        => 'Water Quality',
-    'nav_blog'         => 'Blog',
+    'nav_blog'         => 'News',
     'nav_contact'      => 'Contact',
     'nav_donate'       => 'Donate',
     'nav_join'         => 'Join Us',

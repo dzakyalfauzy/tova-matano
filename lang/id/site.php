@@ -8,7 +8,7 @@ return [
     'nav_partnership'  => 'Partnership',
     'nav_program'      => 'Program',
     'nav_water'        => 'Kualitas Air',
-    'nav_blog'         => 'Blog',
+    'nav_blog'         => 'Berita',
     'nav_contact'      => 'Kontak',
     'nav_donate'       => 'Donasi',
     'nav_join'         => 'Ayo Bergabung',

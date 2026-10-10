@@ -6,7 +6,8 @@ export default function AboutSnippet({ homeStats }) {
         { number: homeStats?.relawan_aktif ?? '—',      label: 'Relawan Aktif' },
         { number: homeStats?.program_terlaksana ?? '—', label: 'Program Terlaksana' },
         { number: homeStats?.sampah_terangkut ?? '—',   label: 'Sampah Terangkut' },
-        { number: homeStats?.sekolah_teredukasi ?? '—', label: 'Sekolah Teredukasi' },
+        { number: homeStats?.rata_rata_ph ?? '—',       label: 'Rata-rata pH Air' },
+        { number: homeStats?.rata_rata_kejernihan ?? '—', label: 'Rata-rata Kejernihan (m)' },
     ];
     return (
         <section className="bg-brand-paper py-16 md:py-24">
@@ -63,7 +64,7 @@ export default function AboutSnippet({ homeStats }) {
 
                 {/* Statistics Bar */}
                 <div className="mt-14 bg-brand-navy rounded-3xl px-6 py-8 md:px-10 md:py-10">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0 md:divide-x md:divide-white/20">
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-0 md:divide-x md:divide-white/20">
                         {stats.map((stat, index) => (
                             <div
                                 key={index}

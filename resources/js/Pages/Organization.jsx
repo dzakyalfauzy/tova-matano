@@ -96,27 +96,167 @@ export default function Organization({ categories, settings }) {
                 </div>
             </div>
 
-            {/* Bagan Organisasi (Visual Chart) */}
-            {settings?.org_chart_image_url && (
-                <div className="bg-white py-16 border-b border-gray-200">
-                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-10">
-                            <h2 className="text-3xl font-heading font-bold text-brand-navy mb-4">Bagan Organisasi</h2>
-                            <div className="w-24 h-1 bg-brand-teal mx-auto"></div>
+            {/* Static Organization Chart */}
+            <div className="bg-white py-16 md:py-24 border-b border-gray-200">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl font-heading font-bold text-brand-navy mb-4">Bagan Organisasi</h2>
+                        <div className="w-24 h-1 bg-brand-teal mx-auto"></div>
+                    </div>
+
+                    <div className="flex flex-col items-center">
+                        {/* Tier 1 */}
+                        <div className="w-64 bg-white border-2 border-brand-navy rounded-xl p-4 text-center shadow-sm z-10 relative">
+                            <h3 className="font-bold text-brand-navy text-lg">PELINDUNG</h3>
                         </div>
-                        <div className="bg-brand-paper p-4 md:p-8 rounded-2xl border border-gray-100 shadow-inner flex justify-center">
-                            <img 
-                                src={`/storage/${settings.org_chart_image_url}`} 
-                                alt="Bagan Organisasi TMCC" 
-                                className="max-w-full h-auto rounded-xl shadow-sm hover:scale-[1.02] transition-transform duration-500 cursor-zoom-in"
-                                onClick={() => window.open(`/storage/${settings.org_chart_image_url}`, '_blank')}
-                            />
+
+                        {/* Line to Tier 2 */}
+                        <div className="w-0.5 h-8 bg-brand-navy"></div>
+
+                        {/* Tier 2 */}
+                        <div className="w-64 bg-white border-2 border-brand-navy rounded-xl p-4 text-center shadow-sm z-10 relative">
+                            <h3 className="font-bold text-brand-navy text-lg">PENASEHAT</h3>
+                        </div>
+
+                        {/* Line to Tier 3 */}
+                        <div className="w-0.5 h-8 bg-brand-navy"></div>
+
+                        {/* Tier 3 */}
+                        <div className="w-64 bg-white border-2 border-brand-teal rounded-xl p-4 text-center shadow-sm z-10 relative">
+                            <h3 className="font-bold text-brand-teal text-lg">PENGARAH</h3>
+                        </div>
+
+                        {/* Line from Tier 3 to Tier 4 Branch */}
+                        <div className="w-0.5 h-8 bg-brand-navy"></div>
+                        
+                        {/* Tier 4 Branching Horizontal Line (Hidden on small mobile, visible on md) */}
+                        <div className="hidden md:block w-full max-w-3xl border-t-2 border-brand-navy h-0"></div>
+
+                        {/* Tier 4 */}
+                        <div className="flex flex-col md:flex-row justify-center w-full max-w-4xl gap-8 md:gap-4 mt-8 md:mt-0 pt-0 md:pt-8 relative">
+                            {/* Vertical lines connecting horizontal line to boxes (Desktop only) */}
+                            <div className="hidden md:block absolute top-0 left-[16.66%] w-0.5 h-8 bg-brand-navy -translate-x-1/2"></div>
+                            <div className="hidden md:block absolute top-0 left-1/2 w-0.5 h-8 bg-brand-navy -translate-x-1/2"></div>
+                            <div className="hidden md:block absolute top-0 left-[83.33%] w-0.5 h-8 bg-brand-navy -translate-x-1/2"></div>
+
+                            {/* Lines from Tier 3 on Mobile */}
+                            <div className="md:hidden w-0.5 h-8 bg-brand-navy mx-auto -mt-8"></div>
+
+                            <div className="flex-1 flex justify-center relative">
+                                <div className="w-full max-w-[260px] bg-brand-paper border-2 border-gray-300 rounded-xl p-4 text-center shadow-sm z-10">
+                                    <h3 className="font-bold text-gray-700 text-sm">Badan Penelitian dan Pengembangan Organisasi</h3>
+                                </div>
+                            </div>
+                            
+                            <div className="md:hidden w-0.5 h-8 bg-brand-navy mx-auto"></div>
+
+                            <div className="flex-1 flex flex-col items-center relative">
+                                <div className="w-full max-w-[260px] bg-brand-navy text-white rounded-xl p-4 text-center shadow-md z-10">
+                                    <h3 className="font-bold text-brand-gold text-sm md:text-base">Dewan Eksekutif Organisasi</h3>
+                                </div>
+                                {/* Line to Tier 5 from Dewan Eksekutif */}
+                                <div className="w-0.5 h-8 bg-brand-navy"></div>
+                            </div>
+
+                            <div className="md:hidden w-0.5 h-8 bg-brand-navy mx-auto"></div>
+
+                            <div className="flex-1 flex justify-center relative">
+                                <div className="w-full max-w-[260px] bg-brand-paper border-2 border-gray-300 rounded-xl p-4 text-center shadow-sm z-10">
+                                    <h3 className="font-bold text-gray-700 text-sm">Dewan Pakar</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Tier 5 */}
+                        <div className="w-64 bg-brand-teal text-white border-2 border-brand-teal rounded-xl p-4 text-center shadow-md z-10 relative">
+                            <h3 className="font-bold text-lg">Direktur Utama TMCC</h3>
+                        </div>
+
+                        {/* Line to Tier 6 Branch */}
+                        <div className="w-0.5 h-8 bg-brand-teal"></div>
+                        
+                        {/* Tier 6 Branching Horizontal Line */}
+                        <div className="w-full lg:max-w-5xl border-t-2 border-brand-teal h-0 flex-col md:flex-row hidden lg:block"></div>
+
+                        {/* Tier 6 & 7 Group */}
+                        <div className="flex flex-col lg:flex-row justify-between w-full lg:max-w-6xl gap-8 lg:gap-4 mt-8 lg:mt-0 pt-0 lg:pt-8 relative px-4">
+                            
+                            {/* Vertical lines connecting horizontal line to Tier 6 boxes (Desktop only) */}
+                            <div className="hidden lg:block absolute top-0 left-[12.5%] w-0.5 h-8 bg-brand-teal -translate-x-1/2"></div>
+                            <div className="hidden lg:block absolute top-0 left-[37.5%] w-0.5 h-8 bg-brand-teal -translate-x-1/2"></div>
+                            <div className="hidden lg:block absolute top-0 left-[62.5%] w-0.5 h-8 bg-brand-teal -translate-x-1/2"></div>
+                            <div className="hidden lg:block absolute top-0 left-[87.5%] w-0.5 h-8 bg-brand-teal -translate-x-1/2"></div>
+
+                            {/* Section 1 */}
+                            <div className="flex-1 flex flex-col items-center">
+                                <div className="md:hidden w-0.5 h-8 bg-brand-teal mx-auto -mt-8"></div>
+                                <div className="w-full max-w-[240px] bg-white border border-brand-teal rounded-xl p-3 text-center shadow-sm z-10 mb-4">
+                                    <h3 className="font-bold text-brand-teal text-sm">Sekretaris Jenderal</h3>
+                                </div>
+                                <div className="w-0.5 h-4 bg-gray-300"></div>
+                                <div className="flex flex-col gap-2 w-full max-w-[240px]">
+                                    <div className="bg-brand-paper border border-gray-200 rounded-lg p-2 text-center shadow-sm">
+                                        <p className="text-xs text-gray-700">Divisi Legal dan Advokasi</p>
+                                    </div>
+                                    <div className="bg-brand-paper border border-gray-200 rounded-lg p-2 text-center shadow-sm">
+                                        <p className="text-xs text-gray-700">Divisi Media dan Kampanye Lingkungan</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Section 2 */}
+                            <div className="flex-1 flex flex-col items-center">
+                                <div className="md:hidden w-0.5 h-8 bg-brand-teal mx-auto -mt-8"></div>
+                                <div className="w-full max-w-[240px] bg-white border border-brand-teal rounded-xl p-3 text-center shadow-sm z-10 mb-4">
+                                    <h3 className="font-bold text-brand-teal text-sm">Direktur Operasional</h3>
+                                </div>
+                                <div className="w-0.5 h-4 bg-gray-300"></div>
+                                <div className="flex flex-col gap-2 w-full max-w-[240px]">
+                                    <div className="bg-brand-paper border border-gray-200 rounded-lg p-2 text-center shadow-sm">
+                                        <p className="text-xs text-gray-700">Divisi Pelestarian dan Penyelamatan Danau</p>
+                                    </div>
+                                    <div className="bg-brand-paper border border-gray-200 rounded-lg p-2 text-center shadow-sm">
+                                        <p className="text-xs text-gray-700">Divisi Pengelolaan Asset, Perlengkapan dan Transportasi Air</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Section 3 */}
+                            <div className="flex-1 flex flex-col items-center">
+                                <div className="md:hidden w-0.5 h-8 bg-brand-teal mx-auto -mt-8"></div>
+                                <div className="w-full max-w-[240px] bg-white border border-brand-teal rounded-xl p-3 text-center shadow-sm z-10 mb-4">
+                                    <h3 className="font-bold text-brand-teal text-sm">Direktur Eksternal Relation</h3>
+                                </div>
+                                <div className="w-0.5 h-4 bg-gray-300"></div>
+                                <div className="flex flex-col gap-2 w-full max-w-[240px]">
+                                    <div className="bg-brand-paper border border-gray-200 rounded-lg p-2 text-center shadow-sm">
+                                        <p className="text-xs text-gray-700">Divisi Pengembangan Masyarakat dan Usaha Penopang</p>
+                                    </div>
+                                    <div className="bg-brand-paper border border-gray-200 rounded-lg p-2 text-center shadow-sm">
+                                        <p className="text-xs text-gray-700">Tim Kreatif dan Event Organizer</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Section 4 */}
+                            <div className="flex-1 flex flex-col items-center">
+                                <div className="md:hidden w-0.5 h-8 bg-brand-teal mx-auto -mt-8"></div>
+                                <div className="w-full max-w-[240px] bg-white border border-brand-teal rounded-xl p-3 text-center shadow-sm z-10 mb-4">
+                                    <h3 className="font-bold text-brand-teal text-sm">Direktur Keuangan</h3>
+                                </div>
+                                {/* No divisions under Keuangan */}
+                            </div>
+                        </div>
+                        
+                        {/* Bottom Banner */}
+                        <div className="w-full max-w-4xl mt-16 bg-brand-gold text-brand-navy rounded-2xl p-4 text-center shadow-md border-b-4 border-brand-navy/20 z-10 relative">
+                            <h2 className="font-bold text-xl tracking-wider uppercase">ANGGOTA DAN SUKARELAWAN</h2>
                         </div>
                     </div>
                 </div>
-            )}
+            </div>
 
-            {/* Content Area */}
+            {/* Content Area (Accordion) */}
             <div className="py-16 md:py-24 bg-brand-paper">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     

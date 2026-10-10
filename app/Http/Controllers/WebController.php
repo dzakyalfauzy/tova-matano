@@ -42,7 +42,8 @@ class WebController extends Controller
                 'relawan_aktif'       => Member::count() + Volunteer::where('status', 'ACCEPTED')->count(),
                 'program_terlaksana'  => Program::count(),
                 'sampah_terangkut'    => $settings->stat_sampah_terangkut ?? '2,4T',
-                'sekolah_teredukasi'  => $settings->stat_sekolah_teredukasi ?? '8',
+                'rata_rata_ph'        => \App\Models\WaterQualityRecord::avg('ph_level') ? number_format(\App\Models\WaterQualityRecord::avg('ph_level'), 2) : '—',
+                'rata_rata_kejernihan' => \App\Models\WaterQualityRecord::avg('clarity_cm') ? number_format(\App\Models\WaterQualityRecord::avg('clarity_cm') / 100, 2) : '—',
             ],
         ]);
     }
