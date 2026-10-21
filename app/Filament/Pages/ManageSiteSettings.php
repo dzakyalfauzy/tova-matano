@@ -26,13 +26,27 @@ class ManageSiteSettings extends Page
     public function mount(): void
     {
         $settings = SiteSettings::firstOrCreate([]);
-        $this->form->fill($settings->toArray());
+        $data = $settings->toArray();
+        if (! isset($data['fixed_text']) || ! is_array($data['fixed_text'])) {
+            $data['fixed_text'] = ['id' => '', 'en' => ''];
+        }
+        $this->form->fill($data);
     }
 
     public function form(Schema $schema): Schema
     {
         return $schema
             ->components([
+                Section::make('Teks Tetap Hero Beranda')
+                    ->description('Teks statis yang tampil di bagian atas slider pada halaman Beranda (tidak ikut berganti saat slide bergeser). Kosongkan jika tidak ingin menampilkan teks tetap.')
+                    ->schema([
+                        TextInput::make('fixed_text.id')
+                            ->label('Teks Tetap (Bahasa Indonesia)')
+                            ->placeholder('Contoh: Tova Matano Care Center'),
+                        TextInput::make('fixed_text.en')
+                            ->label('Fixed Text (English)')
+                            ->placeholder('Example: Tova Matano Care Center'),
+                    ])->columns(2),
                 Section::make('Statistik Beranda')
                     ->description('Angka-angka yang tampil di section Tentang Kami pada halaman Beranda. Relawan Aktif & Program Terlaksana dihitung otomatis dari database.')
                     ->schema([

@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Trophy, Medal } from 'lucide-react';
 import AboutSnippet from '@/Components/Public/AboutSnippet';
 
-export default function Home({ slides, runningTexts, topMembers, programs, settings, homeStats }) {
-    console.log("Slides Data:", slides);
+export default function Home({ slides, runningTexts, topMembers, programs, settings, homeStats, fixedText, heroFixedText }) {
+    const staticFixedText = fixedText || heroFixedText;
     
     // Simple Slider State
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -30,18 +30,18 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
         <PublicLayout settings={settings}>
             <Head title="Beranda" />
 
-            {/* Static Title Header above the slider */}
-            {slides && slides.length > 0 && (
-                <div className="absolute top-20 left-0 right-0 z-40 pointer-events-none text-center px-4 pt-16">
-                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-4 drop-shadow-md">
-                        {slides[0]?.title}
-                    </h1>
-                </div>
-            )}
-
             {/* Hero Slider Area */}
             {slides && slides.length > 0 ? (
                 <div className="relative h-[80vh] md:h-[600px] w-full overflow-hidden bg-brand-navy">
+                    {/* Teks Tetap: Layer statis di atas slider (di luar loop slide) */}
+                    {staticFixedText && (
+                        <div className="absolute top-8 md:top-12 lg:top-14 left-0 right-0 z-30 pointer-events-none text-center px-4">
+                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white tracking-wide [text-shadow:_0_2px_6px_rgba(0,0,0,0.9),_0_4px_16px_rgba(0,0,0,0.8)]">
+                                {staticFixedText}
+                            </h1>
+                        </div>
+                    )}
+
                     {slides.map((slide, index) => (
                         <div
                             key={slide.id}
@@ -49,15 +49,19 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
                                 index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
                             }`}
                         >
-                            <div className="absolute inset-0 bg-black/50 z-10"></div> {/* Overlay */}
                             <img
                                 src={`/storage/${slide.image_url}`}
-                                alt={slide.title}
+                                alt={slide.title || 'Hero Slide'}
                                 className="object-cover w-full h-full"
                             />
-                            <div className="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 pt-20">
+                            <div className={`absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 ${staticFixedText ? 'pt-20 md:pt-28' : 'pt-8'}`}>
+                                {slide.title && (
+                                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-heading font-semibold text-white mb-3 max-w-4xl [text-shadow:_0_2px_4px_rgba(0,0,0,0.9),_0_4px_12px_rgba(0,0,0,0.7)]">
+                                        {slide.title}
+                                    </h2>
+                                )}
                                 {slide.subtitle && (
-                                    <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl drop-shadow">
+                                    <p className="text-base sm:text-lg md:text-xl text-white mb-6 max-w-3xl [text-shadow:_0_1px_3px_rgba(0,0,0,0.9),_0_2px_8px_rgba(0,0,0,0.7)]">
                                         {slide.subtitle}
                                     </p>
                                 )}
