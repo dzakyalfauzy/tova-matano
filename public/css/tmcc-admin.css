@@ -1,0 +1,1113 @@
+:root {
+    color-scheme: only light;
+    --tmcc-navy: #123a52;
+    --tmcc-navy-deep: #0d2c40;
+    --tmcc-teal: #1e7f8c;
+    --tmcc-teal-dark: #176873;
+    --tmcc-gold: #e3a23a;
+    --tmcc-paper: #f6f3ea;
+    --tmcc-paper-deep: #efe9db;
+    --tmcc-white: #ffffff;
+    --tmcc-ink: #1b2b33;
+    --tmcc-muted: #5f7178;
+    --tmcc-border: #e3ddcf;
+    --tmcc-border-strong: #d3cab8;
+    --tmcc-success: #2f7d5c;
+    --tmcc-danger: #b4453f;
+    --tmcc-shadow: 0 1px 2px rgba(18, 58, 82, 0.04), 0 10px 28px rgba(18, 58, 82, 0.07);
+    --tmcc-radius: 14px;
+}
+
+.fi {
+    color-scheme: only light;
+}
+
+.fi-body {
+    background-color: var(--tmcc-paper);
+    color: var(--tmcc-ink);
+    font-family: "Work Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.fi-main,
+.fi-page {
+    background-color: var(--tmcc-paper);
+}
+
+.fi-header-heading,
+.fi-section-header-heading,
+.fi-modal-heading,
+.tmcc-card h3,
+.tmcc-welcome h2 {
+    font-family: "Fraunces", Georgia, "Times New Roman", serif;
+    letter-spacing: -0.01em;
+}
+
+.fi-header-heading {
+    color: var(--tmcc-navy);
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+.fi-header-subheading {
+    color: var(--tmcc-muted);
+    font-size: 0.9rem;
+}
+
+.fi-breadcrumbs {
+    color: var(--tmcc-muted);
+}
+
+/* Brand ------------------------------------------------------------------ */
+
+.fi-sidebar {
+    background: var(--tmcc-navy);
+    border-right: 1px solid rgba(227, 162, 58, 0.22);
+}
+
+/*
+ * Filament applies `.fi-body-has-topbar .fi-sidebar-header` (2 classes) with a white
+ * background. A single-class `.fi-sidebar-header` rule loses that specificity battle.
+ * Match the selector and load later, and keep the header light so the navy brand title
+ * is always readable.
+ */
+.fi-sidebar .fi-sidebar-header,
+.fi-body-has-topbar .fi-sidebar-header {
+    height: auto;
+    min-height: var(--topbar-height, 4rem);
+    padding: 0.7rem 1rem;
+    background: var(--tmcc-white);
+    border-bottom: 1px solid var(--tmcc-border);
+    box-shadow: none;
+}
+
+.fi-sidebar-header .fi-logo {
+    width: 100%;
+    height: auto;
+    margin-bottom: 0;
+}
+
+.tmcc-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: 100%;
+}
+
+.tmcc-brand-logo {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    object-fit: contain;
+    padding: 3px;
+    border-radius: 10px;
+    background: var(--tmcc-paper);
+    border: 1px solid var(--tmcc-border);
+}
+
+.tmcc-brand-copy {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+    min-width: 0;
+}
+
+.tmcc-brand-name {
+    color: var(--tmcc-navy);
+    font-family: "Work Sans", sans-serif;
+    font-size: 0.98rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.tmcc-brand-tagline {
+    color: var(--tmcc-gold);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+/* Sidebar navigation ----------------------------------------------------- */
+
+.fi-sidebar-nav {
+    gap: 0.25rem;
+    padding-top: 0.85rem;
+    overflow-y: auto;
+}
+
+/*
+ * Filament normally paints every item with `--gray-100` and colors the label through
+ * `.fi-sidebar-item-label { color: var(--primary-700) }`. The label is a child element,
+ * so setting `color` on the parent <a> never reaches it (direct declaration beats
+ * inheritance). Every rule below targets the label/icon directly.
+ */
+.fi-sidebar .fi-sidebar-item-btn {
+    background-color: transparent;
+    color: #ffffff;
+    border-radius: 9px;
+    padding: 0.5rem 0.65rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.fi-sidebar .fi-sidebar-item-btn .fi-sidebar-item-label {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.fi-sidebar .fi-sidebar-item-btn .fi-sidebar-item-icon,
+.fi-sidebar .fi-sidebar-item-btn > .fi-icon {
+    color: var(--tmcc-gold);
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/* Hover: match Filament's 4-class hover selector so its gray-100 rule cannot win. */
+.fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover,
+.fi-sidebar .fi-sidebar-item-btn:hover {
+    background-color: #1a4a5f;
+    color: #ffffff;
+}
+
+.fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
+.fi-sidebar .fi-sidebar-item-btn:hover .fi-sidebar-item-label {
+    color: #ffffff;
+}
+
+.fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover .fi-sidebar-item-icon,
+.fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:hover > .fi-icon,
+.fi-sidebar .fi-sidebar-item-btn:hover .fi-sidebar-item-icon,
+.fi-sidebar .fi-sidebar-item-btn:hover > .fi-icon {
+    color: #ffffff;
+}
+
+.fi-sidebar .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:focus-visible,
+.fi-sidebar .fi-sidebar-item-btn:focus-visible {
+    background-color: #1a4a5f;
+    color: #ffffff;
+    outline: 2px solid var(--tmcc-gold);
+    outline-offset: 2px;
+}
+
+.fi-sidebar .fi-sidebar-item-btn:focus-visible .fi-sidebar-item-label {
+    color: #ffffff;
+}
+
+.fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+    background-color: var(--tmcc-teal);
+    background: var(--tmcc-teal);
+    color: #ffffff;
+    box-shadow: inset 3px 0 0 var(--tmcc-gold);
+}
+
+.fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-icon,
+.fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon {
+    color: #ffffff;
+}
+
+/* Keep the active item teal even while hovered/focused. */
+.fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn:hover,
+.fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-btn:focus-visible {
+    background-color: var(--tmcc-teal-dark);
+    color: #ffffff;
+}
+
+.fi-sidebar .fi-sidebar-item-badge-ctn .fi-badge {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+}
+
+.fi-sidebar .fi-sidebar-group-label {
+    color: #b8ccd5;
+    font-family: "Work Sans", sans-serif;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.fi-sidebar .fi-sidebar-group-btn {
+    color: #b8ccd5;
+}
+
+.fi-sidebar .fi-sidebar-group-btn .fi-icon {
+    color: var(--tmcc-gold);
+}
+
+.fi-sidebar .fi-sidebar-group-btn:hover .fi-sidebar-group-label {
+    color: #ffffff;
+}
+
+.fi-sidebar .fi-sidebar-sub-group-items .fi-sidebar-item-btn {
+    padding-inline-start: 1.5rem;
+}
+
+.fi-sidebar-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+/* Top bar ---------------------------------------------------------------- */
+
+.fi-topbar {
+    background: rgba(255, 255, 255, 0.94);
+    border-bottom: 1px solid var(--tmcc-border);
+}
+
+.fi-topbar .fi-icon-btn {
+    color: var(--tmcc-navy);
+}
+
+/* Cards, sections, tables ------------------------------------------------ */
+
+.fi-section,
+.fi-ta-ctn {
+    background: var(--tmcc-white);
+    border: 1px solid var(--tmcc-border);
+    border-radius: var(--tmcc-radius);
+    box-shadow: var(--tmcc-shadow);
+}
+
+.fi-section-header {
+    border-bottom: 1px solid var(--tmcc-border);
+}
+
+.fi-section-header-heading {
+    color: var(--tmcc-navy);
+    font-size: 1.05rem;
+}
+
+.fi-section-header-description {
+    color: var(--tmcc-muted);
+}
+
+.fi-ta-header {
+    background: var(--tmcc-paper);
+    border-bottom: 1px solid var(--tmcc-border);
+}
+
+.fi-ta-header-cell {
+    color: var(--tmcc-navy);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.fi-ta-row {
+    border-bottom: 1px solid #f0ece2;
+}
+
+.fi-ta-row:hover {
+    background: #fbf9f4;
+}
+
+.fi-ta-cell {
+    color: var(--tmcc-ink);
+    font-size: 0.875rem;
+}
+
+.fi-ta-empty-state {
+    color: var(--tmcc-muted);
+}
+
+.fi-pagination {
+    border-top: 1px solid var(--tmcc-border);
+}
+
+/*
+ * Rows-per-page selector.
+ * Filament renders a native <select> with a background-image arrow positioned at
+ * `right .5rem center`. Our generic `.fi-select-input` padding override removed the
+ * 2rem inline-end padding that reserved space for that arrow, causing the number and
+ * arrow to overlap. Reserve the arrow gutter again, only for this pagination select.
+ */
+.fi-pagination-records-per-page-select-ctn .fi-select-input {
+    height: 40px;
+    min-height: 40px;
+    width: auto;
+    min-width: 5.5rem;
+    padding-block: 0.35rem;
+    padding-inline-start: 0.75rem;
+    padding-inline-end: 2.25rem;
+    color: var(--tmcc-navy);
+    background-color: var(--tmcc-white);
+    background-position: right 0.65rem center;
+    background-size: 1.15rem 1.15rem;
+    border-radius: 9px;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.fi-pagination-records-per-page-select-ctn .fi-select-input:focus {
+    outline: none;
+}
+
+.fi-pagination-records-per-page-select-ctn .fi-input-wrp:focus-within {
+    --tw-ring-color: var(--tmcc-teal);
+    box-shadow: 0 0 0 2px var(--tmcc-teal);
+}
+
+/* The labelled variant prefixes "per halaman"; keep the number from crowding it. */
+.fi-pagination-records-per-page-select .fi-input-wrp-prefix .fi-input-wrp-label {
+    color: var(--tmcc-muted);
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* Forms and buttons ------------------------------------------------------ */
+
+/*
+ * Filament draws the field border and focus/invalid ring on `.fi-input-wrp`, while
+ * `.fi-input` / `.fi-select-input` are borderless children. Style the children only;
+ * the wrapper ring already uses --primary-600 / --danger-600 from the exact palette.
+ *
+ * Important: do NOT set a horizontal `padding` shorthand on `.fi-select-input`, or the
+ * 2rem inline-end gutter that Filament reserves for the dropdown arrow is lost.
+ */
+.fi-input,
+.fi-select-input {
+    color: var(--tmcc-ink);
+    font-size: 0.875rem;
+    height: 44px;
+    padding-block: 0.5rem;
+    padding-inline: 0.75rem;
+}
+
+.fi-select-input {
+    padding-inline-end: 2rem;
+}
+
+.fi-input::placeholder,
+.fi-select-input::placeholder {
+    color: var(--tmcc-muted);
+}
+
+.fi-input-wrp {
+    border-radius: 9px;
+}
+
+/* Filament 5 renders textareas inside `.fi-fo-textarea`, not `.fi-textarea`. */
+.fi-fo-textarea textarea {
+    color: var(--tmcc-ink);
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+    resize: vertical;
+}
+
+/* Filament 5 label markup: `.fi-fo-field-label` > `.fi-fo-field-label-content`. */
+.fi-fo-field-label {
+    color: var(--tmcc-navy);
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.fi-fo-field-label-content {
+    color: var(--tmcc-navy);
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.fi-fo-field-label-required-mark {
+    color: var(--tmcc-danger);
+}
+
+/* Validation messages use these classes in Filament 5.8.4. */
+.fi-fo-field-wrp-error-message,
+.fi-fo-field-wrp-error-list {
+    color: var(--tmcc-danger);
+    font-size: 0.76rem;
+    margin-top: 0.35rem;
+}
+
+.fi-btn {
+    border-radius: 9px;
+    font-weight: 500;
+}
+
+/*
+ * Filament paints filled buttons through inline `--bg`/`--hover-bg` variables resolved
+ * from the panel's primary palette. The provider defines an exact palette (600 = #1E7F8C,
+ * 500 = #176873), so no background override is needed here. Only the focus ring is
+ * standardized to the TMCC gold.
+ */
+.fi-btn:not(.fi-outlined).fi-color-primary:focus-visible {
+    outline: 2px solid var(--tmcc-gold);
+    outline-offset: 2px;
+}
+
+.fi-badge {
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 0.66rem;
+    padding: 0.2rem 0.5rem;
+}
+
+.fi-section {
+    border-radius: var(--tmcc-radius);
+    border: 1px solid var(--tmcc-border);
+    background: var(--tmcc-white);
+    box-shadow: var(--tmcc-shadow);
+}
+
+.fi-section-header {
+    border-bottom: 1px solid var(--tmcc-border);
+    padding: 0.75rem 1rem;
+}
+
+.fi-section-header-heading {
+    color: var(--tmcc-navy);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-family: "Fraunces", Georgia, serif;
+}
+
+.fi-section-header-description {
+    color: var(--tmcc-muted);
+    font-size: 0.72rem;
+    margin-top: 0.25rem;
+}
+
+/* Login / simple layout --------------------------------------------------- */
+
+.fi-simple-layout {
+    background:
+        radial-gradient(circle at 12% 18%, rgba(30, 127, 140, 0.1), transparent 42%),
+        radial-gradient(circle at 88% 82%, rgba(227, 162, 58, 0.12), transparent 45%),
+        var(--tmcc-paper);
+}
+
+.fi-simple-main {
+    background: var(--tmcc-white);
+    border: 1px solid var(--tmcc-border);
+    border-radius: 18px;
+    box-shadow: var(--tmcc-shadow);
+}
+
+.fi-simple-header .fi-logo {
+    height: auto;
+}
+
+.fi-simple-header .tmcc-brand {
+    justify-content: center;
+}
+
+.fi-simple-header .tmcc-brand-name {
+    color: var(--tmcc-navy);
+}
+
+.fi-simple-header-heading {
+    color: var(--tmcc-navy);
+    font-family: "Fraunces", Georgia, serif;
+}
+
+/* Dashboard -------------------------------------------------------------- */
+
+.tmcc-dash {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.tmcc-welcome {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.5rem 1.6rem;
+    border-radius: 16px;
+    background:
+        linear-gradient(120deg, rgba(30, 127, 140, 0.9), rgba(18, 58, 82, 0.96)),
+        var(--tmcc-navy);
+    color: #ffffff;
+    box-shadow: 0 14px 34px rgba(18, 58, 82, 0.18);
+}
+
+.tmcc-welcome-copy {
+    max-width: 640px;
+}
+
+.tmcc-eyebrow {
+    display: inline-block;
+    margin-bottom: 0.4rem;
+    color: var(--tmcc-gold);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.tmcc-welcome h2 {
+    margin: 0 0 0.35rem;
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.tmcc-welcome p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+.tmcc-welcome-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+    flex: 0 0 auto;
+}
+
+.tmcc-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.tmcc-date .fi-icon {
+    width: 1rem;
+    height: 1rem;
+    color: var(--tmcc-gold);
+}
+
+.tmcc-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 0.95rem;
+    border-radius: 9px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.tmcc-button .fi-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.tmcc-button--primary {
+    background: var(--tmcc-teal);
+    color: #ffffff;
+}
+
+.tmcc-button--primary:hover {
+    background: var(--tmcc-teal-dark);
+    color: #ffffff;
+}
+
+.tmcc-button--primary:focus-visible {
+    background: var(--tmcc-teal-dark);
+    color: #ffffff;
+    outline: 2px solid var(--tmcc-gold);
+    outline-offset: 2px;
+}
+
+.tmcc-button--secondary {
+    background: transparent;
+    color: var(--tmcc-navy);
+    border: 1px solid var(--tmcc-border);
+    border-radius: 9px;
+}
+
+.tmcc-button--secondary:hover {
+    background: var(--tmcc-border-strong);
+    color: var(--tmcc-navy);
+}
+
+.tmcc-button--secondary:focus-visible {
+    background: var(--tmcc-border-strong);
+    color: var(--tmcc-navy);
+    outline: 2px solid var(--tmcc-teal);
+    outline-offset: 2px;
+}
+
+.tmcc-button--danger {
+    background: var(--tmcc-danger);
+    color: #ffffff;
+}
+
+.tmcc-button--danger:hover {
+    background: #b4453f;
+    color: #ffffff;
+}
+
+.tmcc-button--danger:focus-visible {
+    background: #b4453f;
+    color: #ffffff;
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+.tmcc-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.9rem;
+}
+
+.tmcc-kpi {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    padding: 1rem 1.05rem;
+    background: var(--tmcc-white);
+    border: 1px solid var(--tmcc-border);
+    border-radius: 13px;
+    box-shadow: 0 1px 2px rgba(18, 58, 82, 0.03);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+a.tmcc-kpi:hover {
+    border-color: rgba(30, 127, 140, 0.45);
+    transform: translateY(-1px);
+}
+
+.tmcc-kpi-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    border-radius: 10px;
+    background: rgba(18, 58, 82, 0.07);
+    color: var(--tmcc-navy);
+}
+
+.tmcc-kpi-icon .fi-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+}
+
+.tmcc-kpi--warning .tmcc-kpi-icon {
+    background: rgba(227, 162, 58, 0.16);
+    color: #9a6413;
+}
+
+.tmcc-kpi--success .tmcc-kpi-icon {
+    background: rgba(47, 125, 92, 0.14);
+    color: #2f7d5c;
+}
+
+.tmcc-kpi-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.tmcc-kpi-label {
+    color: var(--tmcc-muted);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.tmcc-kpi-value {
+    color: var(--tmcc-navy);
+    font-size: 1.55rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.tmcc-kpi-hint {
+    color: var(--tmcc-muted);
+    font-size: 0.72rem;
+    line-height: 1.35;
+}
+
+.tmcc-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 1.1rem;
+    align-items: start;
+}
+
+.tmcc-column-main,
+.tmcc-column-side {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    min-width: 0;
+}
+
+.tmcc-card {
+    background: var(--tmcc-white);
+    border: 1px solid var(--tmcc-border);
+    border-radius: var(--tmcc-radius);
+    box-shadow: var(--tmcc-shadow);
+    overflow: hidden;
+}
+
+.tmcc-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.2rem 0.85rem;
+    border-bottom: 1px solid var(--tmcc-border);
+}
+
+.tmcc-card-header h3 {
+    margin: 0;
+    color: var(--tmcc-navy);
+    font-size: 1.02rem;
+    font-weight: 600;
+}
+
+.tmcc-card-header p {
+    margin: 0.2rem 0 0;
+    color: var(--tmcc-muted);
+    font-size: 0.76rem;
+}
+
+.tmcc-link {
+    color: var(--tmcc-teal);
+    font-size: 0.76rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.tmcc-link:hover {
+    color: var(--tmcc-teal-dark);
+    text-decoration: underline;
+}
+
+.tmcc-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.tmcc-list-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 1.2rem;
+    border-bottom: 1px solid #f1ede4;
+}
+
+.tmcc-list-row:last-child {
+    border-bottom: 0;
+}
+
+.tmcc-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border-radius: 999px;
+    background: var(--tmcc-navy);
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.tmcc-avatar--paper {
+    background: var(--tmcc-paper-deep);
+    color: var(--tmcc-navy);
+}
+
+.tmcc-avatar .fi-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.tmcc-list-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.tmcc-list-copy strong {
+    color: var(--tmcc-ink);
+    font-size: 0.84rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tmcc-list-copy small {
+    color: var(--tmcc-muted);
+    font-size: 0.72rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tmcc-list-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.2rem;
+    flex: 0 0 auto;
+}
+
+.tmcc-list-meta small {
+    color: var(--tmcc-muted);
+    font-size: 0.68rem;
+}
+
+.tmcc-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.tmcc-badge--success {
+    background: rgba(47, 125, 92, 0.12);
+    color: #256a4c;
+}
+
+.tmcc-badge--warning {
+    background: rgba(227, 162, 58, 0.18);
+    color: #8a5a10;
+}
+
+.tmcc-badge--danger {
+    background: rgba(180, 69, 63, 0.13);
+    color: #94332e;
+}
+
+.tmcc-badge--muted {
+    background: rgba(18, 58, 82, 0.08);
+    color: var(--tmcc-muted);
+}
+
+.tmcc-table-wrap {
+    overflow-x: auto;
+}
+
+.tmcc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+.tmcc-table th {
+    padding: 0.65rem 1.2rem;
+    background: #fbf9f4;
+    border-bottom: 1px solid var(--tmcc-border);
+    color: var(--tmcc-muted);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.tmcc-table td {
+    padding: 0.7rem 1.2rem;
+    border-bottom: 1px solid #f1ede4;
+    color: var(--tmcc-ink);
+    white-space: nowrap;
+}
+
+.tmcc-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.tmcc-actions {
+    display: flex;
+    flex-direction: column;
+}
+
+.tmcc-action {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.75rem 1.2rem;
+    border-bottom: 1px solid #f1ede4;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+}
+
+.tmcc-action:last-child {
+    border-bottom: 0;
+}
+
+.tmcc-action:hover {
+    background: #fbf9f4;
+}
+
+.tmcc-action-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border-radius: 9px;
+    background: rgba(30, 127, 140, 0.1);
+    color: var(--tmcc-teal);
+}
+
+.tmcc-action-icon .fi-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.tmcc-action strong {
+    display: block;
+    color: var(--tmcc-navy);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.tmcc-action small {
+    display: block;
+    color: var(--tmcc-muted);
+    font-size: 0.7rem;
+}
+
+.tmcc-attention {
+    display: flex;
+    flex-direction: column;
+    padding: 0.35rem 0;
+}
+
+.tmcc-attention-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 1.2rem;
+    color: var(--tmcc-ink);
+    font-size: 0.78rem;
+    text-decoration: none;
+}
+
+.tmcc-attention-item:hover {
+    background: #fbf9f4;
+}
+
+.tmcc-attention-item span:nth-child(2) {
+    flex: 1 1 auto;
+}
+
+.tmcc-attention-item .fi-icon {
+    width: 0.9rem;
+    height: 0.9rem;
+    color: var(--tmcc-muted);
+}
+
+.tmcc-dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 999px;
+    background: var(--tmcc-muted);
+}
+
+.tmcc-dot--warning {
+    background: var(--tmcc-gold);
+}
+
+.tmcc-dot--info {
+    background: var(--tmcc-teal);
+}
+
+.tmcc-dot--muted {
+    background: #b8c4c9;
+}
+
+.tmcc-empty {
+    margin: 0;
+    padding: 1.1rem 1.2rem;
+    color: var(--tmcc-muted);
+    font-size: 0.8rem;
+}
+
+.tmcc-dash-note {
+    margin: 0;
+    padding: 0 0.25rem;
+    color: var(--tmcc-muted);
+    font-size: 0.7rem;
+    line-height: 1.5;
+}
+
+/* Responsive ------------------------------------------------------------- */
+
+@media (max-width: 1279px) {
+    .tmcc-kpi-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 1023px) {
+    .tmcc-columns {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .tmcc-column-side {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+    }
+
+    .tmcc-dash-note {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 767px) {
+    .tmcc-welcome {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tmcc-welcome-side {
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .tmcc-kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tmcc-column-side {
+        display: flex;
+    }
+}
+
+@media (max-width: 520px) {
+    .tmcc-kpi-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .tmcc-list-row {
+        align-items: flex-start;
+    }
+
+    .tmcc-list-meta {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+}

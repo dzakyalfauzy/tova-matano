@@ -18,7 +18,17 @@ class MemberResource extends Resource
 {
     protected static ?string $model = Member::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Keanggotaan & Donasi';
+
+    protected static ?string $navigationLabel = 'Anggota';
+
+    protected static ?string $modelLabel = 'Anggota';
+
+    protected static ?string $pluralModelLabel = 'Anggota';
+
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $recordTitleAttribute = 'name';
 

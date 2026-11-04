@@ -18,7 +18,17 @@ class HeroSlideResource extends Resource
 {
     protected static ?string $model = HeroSlide::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhoto;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Konten Website';
+
+    protected static ?string $navigationLabel = 'Slider Beranda';
+
+    protected static ?string $modelLabel = 'Slider Beranda';
+
+    protected static ?string $pluralModelLabel = 'Slider Beranda';
+
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $recordTitleAttribute = 'title';
 

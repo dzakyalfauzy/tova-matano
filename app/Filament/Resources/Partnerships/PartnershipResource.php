@@ -18,9 +18,17 @@ class PartnershipResource extends Resource
 {
     protected static ?string $model = Partnership::class;
 
-    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-hand-raised';
-    
-    protected static \UnitEnum|string|null $navigationGroup = 'Konten Website';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHandRaised;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Konten Website';
+
+    protected static ?string $navigationLabel = 'Kemitraan';
+
+    protected static ?string $modelLabel = 'Kemitraan';
+
+    protected static ?string $pluralModelLabel = 'Kemitraan';
+
+    protected static ?int $navigationSort = 100;
 
     public static function form(Schema $schema): Schema
     {

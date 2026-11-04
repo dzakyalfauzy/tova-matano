@@ -44,7 +44,7 @@ class WebController extends Controller
             'fixedText' => $settings?->getFixedText(),
             'heroFixedText' => $settings?->getFixedText(),
             'homeStats' => [
-                'relawan_aktif' => Member::count() + Volunteer::where('status', 'ACCEPTED')->count(),
+                'relawan_aktif' => Member::count() + Volunteer::where('status', 'APPROVED')->count(),
                 'program_terlaksana' => Program::count(),
                 'sampah_terangkut' => $settings->stat_sampah_terangkut ?? '2,4T',
                 'rata_rata_ph' => WaterQualityRecord::avg('ph') ? number_format(WaterQualityRecord::avg('ph'), 2) : '—',
@@ -81,6 +81,10 @@ class WebController extends Controller
     {
         return Inertia::render('Members', [
             'members' => Member::orderByDesc('points')->get(),
+            'volunteers' => Volunteer::where('status', 'APPROVED')
+                ->select(['id', 'full_name', 'photo_url', 'submitted_at'])
+                ->orderByDesc('submitted_at')
+                ->get(),
             'settings' => $this->settings(),
         ]);
     }
@@ -161,13 +165,177 @@ class WebController extends Controller
         ]);
     }
 
-    public function waterQuality()
+    public function waterQuality(Request $request)
     {
+        $perPageOptions = [10, 15, 25, 50];
+        $perPageInput = $request->input('per_page', 10);
+        $perPage = is_numeric($perPageInput) ? (int) $perPageInput : 10;
+
+        if (! in_array($perPage, $perPageOptions, true)) {
+            $perPage = 10;
+        }
+
+        $rangeInput = $request->input('range', 'all');
+        $range = is_string($rangeInput) && in_array($rangeInput, ['all', 'week', 'month', 'year'], true)
+            ? $rangeInput
+            : 'all';
+
+        $samplingPointInput = $request->input('sampling_point');
+        $samplingPointId = is_numeric($samplingPointInput) ? (int) $samplingPointInput : null;
+
+        $applyFilters = function ($query) use ($samplingPointId, $range) {
+            return $query
+                ->when($samplingPointId, fn ($q) => $q->where('water_sampling_point_id', $samplingPointId))
+                ->when($range !== 'all', function ($q) use ($range) {
+                    $from = match ($range) {
+                        'week' => now()->subWeek(),
+                        'month' => now()->subMonthNoOverflow(),
+                        'year' => now()->subYear(),
+                        default => null,
+                    };
+
+                    if ($from) {
+                        $q->where('recorded_at', '>=', $from);
+                    }
+                });
+        };
+
+        // Dataset grafik: seluruh record pada filter aktif, tidak dibatasi paginasi tabel.
+        $records = $applyFilters(WaterQualityRecord::query())
+            ->with('samplingPoint:id,name')
+            ->orderBy('recorded_at')
+            ->orderBy('id')
+            ->get([
+                'id',
+                'recorded_at',
+                'tss',
+                'ph',
+                'tds',
+                'dissolved_oxygen',
+                'temperature',
+                'clarity_cm',
+                'water_sampling_point_id',
+            ]);
+
+        $paginatedRecords = $applyFilters(WaterQualityRecord::query())
+            ->with('samplingPoint:id,name')
+            ->orderByDesc('recorded_at')
+            ->orderByDesc('id')
+            ->paginate($perPage)
+            ->withQueryString();
+
+        $parameterKeys = array_keys(config('water_quality.parameters'));
+
+        $aggregates = $applyFilters(WaterQualityRecord::query())
+            ->selectRaw(collect($parameterKeys)
+                ->map(fn ($key) => "AVG({$key}) as avg_{$key}, COUNT({$key}) as count_{$key}")
+                ->implode(', '))
+            ->first();
+
+        $summary = [];
+
+        foreach (config('water_quality.parameters') as $key => $parameter) {
+            $average = $aggregates?->{"avg_{$key}"};
+            $average = $average !== null ? round((float) $average, $parameter['decimals']) : null;
+
+            $summary[$key] = [
+                'key' => $key,
+                ...$parameter,
+                'average' => $average,
+                'count' => (int) ($aggregates?->{"count_{$key}"} ?? 0),
+                'status' => $this->waterQualityStatus($parameter, $average),
+            ];
+        }
+
         return Inertia::render('WaterQuality', [
-            'records' => WaterQualityRecord::with('samplingPoint')->orderBy('recorded_at')->get(),
-            'samplingPoints' => WaterSamplingPoint::where('is_active', true)->get(),
+            'records' => $records,
+            'paginatedRecords' => $paginatedRecords,
+            'samplingPoints' => WaterSamplingPoint::where('is_active', true)->orderBy('name')->get(),
+            'summary' => $summary,
+            'waterQualityConfig' => config('water_quality'),
+            'filters' => [
+                'sampling_point' => $samplingPointId ?? 'all',
+                'range' => $range,
+                'per_page' => $perPage,
+            ],
+            'perPageOptions' => $perPageOptions,
             'settings' => $this->settings(),
         ]);
+    }
+
+    /**
+     * Tentukan status rata-rata/parameter terhadap ambang pada config/water_quality.php.
+     *
+     * @param  array<string, mixed>  $parameter
+     */
+    private function waterQualityStatus(array $parameter, ?float $value): string
+    {
+        if ($value === null) {
+            return 'no_data';
+        }
+
+        $min = $parameter['min'] ?? null;
+        $max = $parameter['max'] ?? null;
+        $warningMin = $parameter['warning_min'] ?? null;
+        $warningMax = $parameter['warning_max'] ?? null;
+
+        switch ($parameter['threshold_type']) {
+            case 'maximum':
+                if ($max !== null && $value > $max) {
+                    return 'abnormal';
+                }
+
+                if ($warningMax !== null && $value > $warningMax) {
+                    return 'warning';
+                }
+
+                return 'normal';
+
+            case 'minimum':
+                if ($min !== null && $value < $min) {
+                    return 'abnormal';
+                }
+
+                if ($warningMin !== null && $value < $warningMin) {
+                    return 'warning';
+                }
+
+                return 'normal';
+
+            case 'range':
+                if (($min !== null && $value < $min) || ($max !== null && $value > $max)) {
+                    return 'abnormal';
+                }
+
+                if (($warningMin !== null && $value < $warningMin) || ($warningMax !== null && $value > $warningMax)) {
+                    return 'warning';
+                }
+
+                return 'normal';
+
+            case 'deviation':
+                $baseline = $parameter['baseline'] ?? null;
+                $maxDeviation = $parameter['max_deviation'] ?? null;
+
+                if ($baseline === null || $maxDeviation === null) {
+                    return 'unassessed';
+                }
+
+                $deviation = abs($value - (float) $baseline);
+
+                if ($deviation > $maxDeviation) {
+                    return 'abnormal';
+                }
+
+                if ($deviation > $maxDeviation * 0.8) {
+                    return 'warning';
+                }
+
+                return 'normal';
+
+            default:
+                return 'unassessed';
+        }
     }
 
     public function joinAndDonate()
@@ -186,15 +354,38 @@ class WebController extends Controller
             'phone' => 'required|string|max:20',
             'address' => 'nullable|string|max:500',
             'motivation' => 'nullable|string|max:2000',
+            'quote' => 'nullable|string|max:300',
+            'quote_consent' => [
+                'nullable',
+                'boolean',
+                function (string $attribute, mixed $value, \Closure $fail) use ($request) {
+                    if (filled($request->input('quote')) && ! filter_var($value, FILTER_VALIDATE_BOOLEAN)) {
+                        $fail('Persetujuan publikasi kutipan wajib dicentang jika Anda mengisi kutipan.');
+                    }
+                },
+            ],
+        ], [
+            'quote.max' => 'Kutipan maksimal 300 karakter.',
         ]);
+
+        $hasQuote = filled($request->input('quote'));
+        $quote = $hasQuote ? trim((string) $request->input('quote')) : null;
+        $consent = $hasQuote && filter_var($request->input('quote_consent'), FILTER_VALIDATE_BOOLEAN);
 
         $code = strtoupper(Str::random(3).'-'.Str::random(4).'-'.Str::random(3));
 
-        Volunteer::create(array_merge($validated, [
+        Volunteer::create([
+            'full_name' => $validated['full_name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'address' => $validated['address'] ?? null,
+            'motivation' => $validated['motivation'] ?? null,
+            'quote' => $quote,
+            'quote_consent' => $consent,
             'registration_code' => $code,
             'status' => 'PENDING',
             'submitted_at' => now(),
-        ]));
+        ]);
 
         Mail::to($validated['email'])->send(new VolunteerRegistrationMail($validated['full_name'], $code));
 

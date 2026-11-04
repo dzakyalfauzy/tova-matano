@@ -18,7 +18,17 @@ class OrgCategoryResource extends Resource
 {
     protected static ?string $model = OrgCategory::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFolderOpen;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Konten Website';
+
+    protected static ?string $navigationLabel = 'Kategori Organisasi';
+
+    protected static ?string $modelLabel = 'Kategori Organisasi';
+
+    protected static ?string $pluralModelLabel = 'Kategori Organisasi';
+
+    protected static ?int $navigationSort = 80;
 
     protected static ?string $recordTitleAttribute = 'name';
 

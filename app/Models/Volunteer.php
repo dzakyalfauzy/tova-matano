@@ -10,10 +10,12 @@ class Volunteer extends Model
 {
     protected $fillable = [
         'registration_code', 'full_name', 'email', 'phone', 'address', 'motivation',
+        'quote', 'quote_consent',
         'status', 'photo_url', 'submitted_at', 'reviewed_at', 'reviewed_by', 'notified_at',
     ];
 
     protected $casts = [
+        'quote_consent' => 'boolean',
         'submitted_at' => 'datetime',
         'reviewed_at' => 'datetime',
         'notified_at' => 'datetime',
@@ -24,7 +26,7 @@ class Volunteer extends Model
         // Auto-generate kode pendaftaran unik saat data baru dibuat (Opsi D: cek status manual)
         static::creating(function (Volunteer $volunteer) {
             if (empty($volunteer->registration_code)) {
-                $volunteer->registration_code = 'TMCC-' . strtoupper(Str::random(6));
+                $volunteer->registration_code = 'TMCC-'.strtoupper(Str::random(6));
             }
         });
     }

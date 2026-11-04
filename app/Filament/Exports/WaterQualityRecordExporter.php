@@ -19,7 +19,11 @@ class WaterQualityRecordExporter extends Exporter
                 ->label('ID'),
             ExportColumn::make('recorded_at'),
             ExportColumn::make('samplingPoint.name')->label('Titik Sample'),
-            ExportColumn::make('ph'),
+            ExportColumn::make('tss')->label('TSS (mg/L)'),
+            ExportColumn::make('ph')->label('pH'),
+            ExportColumn::make('tds')->label('TDS (mg/L)'),
+            ExportColumn::make('dissolved_oxygen')->label('DO (mg/L)'),
+            ExportColumn::make('temperature')->label('Suhu (°C)'),
             ExportColumn::make('clarity_cm')->label('Kejernihan (cm)'),
             ExportColumn::make('notes')->label('Catatan'),
             ExportColumn::make('recorder.name')->label('Diukur Oleh'),
@@ -28,10 +32,10 @@ class WaterQualityRecordExporter extends Exporter
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Your water quality record export has completed and ' . Str::of('row')->counted($export->successful_rows) . ' exported.';
+        $body = 'Your water quality record export has completed and '.Str::of('row')->counted($export->successful_rows).' exported.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . Str::of('row')->counted($failedRowsCount) . ' failed to export.';
+            $body .= ' '.Str::of('row')->counted($failedRowsCount).' failed to export.';
         }
 
         return $body;

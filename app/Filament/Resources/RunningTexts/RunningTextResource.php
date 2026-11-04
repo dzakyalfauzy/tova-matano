@@ -18,7 +18,17 @@ class RunningTextResource extends Resource
 {
     protected static ?string $model = RunningText::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMegaphone;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Konten Website';
+
+    protected static ?string $navigationLabel = 'Teks Berjalan';
+
+    protected static ?string $modelLabel = 'Teks Berjalan';
+
+    protected static ?string $pluralModelLabel = 'Teks Berjalan';
+
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $recordTitleAttribute = 'text';
 

@@ -18,7 +18,17 @@ class DonationChannelResource extends Resource
 {
     protected static ?string $model = DonationChannel::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Keanggotaan & Donasi';
+
+    protected static ?string $navigationLabel = 'Saluran Donasi';
+
+    protected static ?string $modelLabel = 'Saluran Donasi';
+
+    protected static ?string $pluralModelLabel = 'Saluran Donasi';
+
+    protected static ?int $navigationSort = 30;
 
     protected static ?string $recordTitleAttribute = 'bank_name';
 

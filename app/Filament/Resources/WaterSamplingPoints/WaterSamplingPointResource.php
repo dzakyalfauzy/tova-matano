@@ -18,10 +18,17 @@ class WaterSamplingPointResource extends Resource
 {
     protected static ?string $model = WaterSamplingPoint::class;
 
-    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-map-pin';
-    protected static \UnitEnum|string|null $navigationGroup = 'Kualitas Air';
-    protected static ?string $modelLabel = 'Titik Sample';
-    protected static ?string $pluralModelLabel = 'Titik Sample';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Lingkungan & Monitoring';
+
+    protected static ?string $navigationLabel = 'Titik Sampling';
+
+    protected static ?string $modelLabel = 'Titik Sampling';
+
+    protected static ?string $pluralModelLabel = 'Titik Sampling';
+
+    protected static ?int $navigationSort = 20;
 
     public static function form(Schema $schema): Schema
     {

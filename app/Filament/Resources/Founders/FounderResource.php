@@ -18,7 +18,17 @@ class FounderResource extends Resource
 {
     protected static ?string $model = Founder::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedIdentification;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Konten Website';
+
+    protected static ?string $navigationLabel = 'Pendiri';
+
+    protected static ?string $modelLabel = 'Pendiri';
+
+    protected static ?string $pluralModelLabel = 'Pendiri';
+
+    protected static ?int $navigationSort = 70;
 
     protected static ?string $recordTitleAttribute = 'name';
 

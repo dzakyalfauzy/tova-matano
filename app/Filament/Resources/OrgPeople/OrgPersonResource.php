@@ -18,7 +18,17 @@ class OrgPersonResource extends Resource
 {
     protected static ?string $model = OrgPerson::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Konten Website';
+
+    protected static ?string $navigationLabel = 'Personel Organisasi';
+
+    protected static ?string $modelLabel = 'Personel Organisasi';
+
+    protected static ?string $pluralModelLabel = 'Personel Organisasi';
+
+    protected static ?int $navigationSort = 90;
 
     protected static ?string $recordTitleAttribute = 'name';
 

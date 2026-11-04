@@ -4,7 +4,6 @@ namespace App\Filament\Pages;
 
 use App\Models\SiteSettings;
 use BackedEnum;
-use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -18,6 +17,14 @@ class ManageSiteSettings extends Page
     use InteractsWithForms;
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
+
+    protected static ?string $navigationLabel = 'Pengaturan Situs';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Pengaturan';
+
+    protected static ?int $navigationSort = 10;
+
+    protected static ?string $title = 'Pengaturan Situs';
 
     protected string $view = 'filament.pages.manage-site-settings';
 
@@ -83,27 +90,34 @@ class ManageSiteSettings extends Page
                             ->directory('settings'),
                     ]),
                 Section::make('Kontak & Media Sosial')
+                    ->description('Informasi kontak dan tautan media sosial yang tampil di footer serta halaman kontak.')
                     ->schema([
-                        TextInput::make('address'),
-                        TextInput::make('phone')->tel(),
-                        TextInput::make('whatsapp')->tel(),
-                        TextInput::make('email')->email(),
-                        TextInput::make('instagram_url')->url(),
-                        TextInput::make('facebook_url')->url(),
-                        TextInput::make('tiktok_url')->url(),
-                        TextInput::make('twitter_url')->url(),
+                        TextInput::make('address')
+                            ->label('Alamat'),
+                        TextInput::make('phone')
+                            ->label('Nomor Telepon')
+                            ->tel(),
+                        TextInput::make('whatsapp')
+                            ->label('Nomor WhatsApp')
+                            ->tel(),
+                        TextInput::make('email')
+                            ->label('Email')
+                            ->email(),
+                        TextInput::make('instagram_url')
+                            ->label('URL Instagram')
+                            ->url(),
+                        TextInput::make('facebook_url')
+                            ->label('URL Facebook')
+                            ->url(),
+                        TextInput::make('tiktok_url')
+                            ->label('URL TikTok')
+                            ->url(),
+                        TextInput::make('twitter_url')
+                            ->label('URL Twitter/X')
+                            ->url(),
                     ])->columns(2),
             ])
             ->statePath('data');
-    }
-
-    protected function getFormActions(): array
-    {
-        return [
-            Action::make('save')
-                ->label('Save Settings')
-                ->submit('save'),
-        ];
     }
 
     public function save(): void
@@ -113,7 +127,8 @@ class ManageSiteSettings extends Page
 
         Notification::make()
             ->success()
-            ->title('Settings updated')
+            ->title('Pengaturan disimpan')
+            ->body('Perubahan pengaturan situs berhasil disimpan.')
             ->send();
     }
 }

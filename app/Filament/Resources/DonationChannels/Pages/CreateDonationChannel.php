@@ -2,10 +2,13 @@
 
 namespace App\Filament\Resources\DonationChannels\Pages;
 
+use App\Filament\Concerns\RedirectsToResourceIndex;
 use App\Filament\Resources\DonationChannels\DonationChannelResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateDonationChannel extends CreateRecord
 {
+    use RedirectsToResourceIndex;
+
     protected static string $resource = DonationChannelResource::class;
 }

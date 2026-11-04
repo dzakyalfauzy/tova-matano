@@ -1,7 +1,7 @@
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { useState } from 'react';
-import { CheckCircle, CreditCard, User, Mail, Phone, MapPin, FileText } from 'lucide-react';
+import { CheckCircle, CreditCard, User, Mail, Phone, MapPin, FileText, Quote } from 'lucide-react';
 
 export default function JoinDonate({ donationChannels, settings }) {
     const [registrationCode, setRegistrationCode] = useState(null);
@@ -12,6 +12,8 @@ export default function JoinDonate({ donationChannels, settings }) {
         phone: '',
         address: '',
         motivation: '',
+        quote: '',
+        quote_consent: false,
     });
 
     const handleSubmit = (e) => {
@@ -146,6 +148,68 @@ export default function JoinDonate({ donationChannels, settings }) {
                                             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-teal/30 focus:border-brand-teal outline-none transition resize-none"
                                             placeholder="Ceritakan motivasi Anda bergabung dengan TMCC..."
                                         />
+                                        {errors.motivation && <p className="text-red-500 text-xs mt-1">{errors.motivation}</p>}
+                                    </div>
+
+                                    {/* Quote / Kutipan (Optional) */}
+                                    <div>
+                                        <div className="flex items-center justify-between mb-1.5">
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                <Quote className="inline h-4 w-4 mr-1.5 text-brand-teal" />
+                                                Kutipan / Quotes <span className="text-xs font-normal text-gray-500">(Opsional)</span>
+                                            </label>
+                                            <span className={`text-xs ${data.quote?.length > 300 ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
+                                                {data.quote?.length || 0}/300
+                                            </span>
+                                        </div>
+                                        <textarea
+                                            value={data.quote}
+                                            maxLength={300}
+                                            onChange={e => {
+                                                const val = e.target.value;
+                                                setData(prev => ({
+                                                    ...prev,
+                                                    quote: val,
+                                                    quote_consent: val.trim() === '' ? false : prev.quote_consent,
+                                                }));
+                                            }}
+                                            rows={3}
+                                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-teal/30 focus:border-brand-teal outline-none transition resize-none"
+                                            placeholder="Tuliskan kutipan, pesan, atau harapan Anda untuk pelestarian Danau Matano..."
+                                        />
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            Kutipan Anda berpotensi ditampilkan pada Running Text website Tova Matano Care Center.
+                                        </p>
+                                        {errors.quote && <p className="text-red-500 text-xs mt-1">{errors.quote}</p>}
+
+                                        {/* Publication Consent Checkbox */}
+                                        <div className={`mt-3 p-3.5 rounded-xl border transition-all ${
+                                            data.quote?.trim()
+                                                ? 'bg-amber-50/60 border-amber-200/80'
+                                                : 'bg-gray-50/70 border-gray-200/60'
+                                        }`}>
+                                            <label className="flex items-start gap-3 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={data.quote_consent}
+                                                    onChange={e => setData('quote_consent', e.target.checked)}
+                                                    className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-teal focus:ring-brand-teal"
+                                                />
+                                                <div className="text-xs leading-relaxed text-gray-700">
+                                                    <span className="font-semibold text-brand-navy">
+                                                        Saya menyetujui kutipan ini ditampilkan pada website Tova Matano Care Center.
+                                                    </span>
+                                                    <p className="text-gray-500 mt-0.5">
+                                                        {data.quote?.trim()
+                                                            ? 'Wajib dicentang agar kutipan Anda dapat dipublikasikan di running text website.'
+                                                            : 'Hanya berlaku jika Anda mengisi kolom kutipan di atas.'}
+                                                    </p>
+                                                </div>
+                                            </label>
+                                            {errors.quote_consent && (
+                                                <p className="text-red-500 text-xs mt-2 pl-7">{errors.quote_consent}</p>
+                                            )}
+                                        </div>
                                     </div>
 
                                     <button

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Founders\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
@@ -15,18 +16,24 @@ class FoundersTable
     {
         return $table
             ->columns([
-                ImageColumn::make('photo_url'),
+                ImageColumn::make('photo_url')
+                    ->label('Foto'),
                 TextColumn::make('name')
+                    ->label('Nama')
                     ->searchable(),
                 TextColumn::make('role')
+                    ->label('Jabatan')
                     ->searchable(),
                 TextColumn::make('org_name')
+                    ->label('Organisasi')
                     ->searchable(),
                 TextColumn::make('created_at')
+                    ->label('Dibuat Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label('Diperbarui Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -38,6 +45,7 @@ class FoundersTable
             ])
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -43,8 +43,10 @@ export default function Footer({ settings }) {
                         <h4 className="font-heading font-semibold text-lg mb-4 text-brand-paper">Tautan Cepat</h4>
                         <ul className="space-y-2 text-sm">
                             <li><Link href="/tentang" className="text-gray-300 hover:text-brand-gold transition-colors">Tentang Kami</Link></li>
+                            <li><Link href="/struktur-organisasi" className="text-gray-300 hover:text-brand-gold transition-colors">Struktur Organisasi</Link></li>
+                            <li><Link href="/anggota" className="text-gray-300 hover:text-brand-gold transition-colors">Anggota & Relawan</Link></li>
                             <li><Link href="/program" className="text-gray-300 hover:text-brand-gold transition-colors">Program Utama</Link></li>
-                            <li><Link href="/struktur-organisasi" className="text-gray-300 hover:text-brand-gold transition-colors">Pengurus & Relawan</Link></li>
+                            <li><Link href="/galeri" className="text-gray-300 hover:text-brand-gold transition-colors">Galeri Dokumentasi</Link></li>
                             <li><Link href="/blog" className="text-gray-300 hover:text-brand-gold transition-colors">Berita & Edukasi</Link></li>
                             <li><Link href="/kontak" className="text-gray-300 hover:text-brand-gold transition-colors">Hubungi Kami</Link></li>
                         </ul>

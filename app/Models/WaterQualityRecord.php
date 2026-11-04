@@ -7,10 +7,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WaterQualityRecord extends Model
 {
-    protected $fillable = ['recorded_at', 'ph', 'clarity_cm', 'notes', 'recorded_by', 'water_sampling_point_id'];
+    protected $fillable = [
+        'recorded_at',
+        'tss',
+        'ph',
+        'tds',
+        'dissolved_oxygen',
+        'temperature',
+        'clarity_cm',
+        'notes',
+        'recorded_by',
+        'water_sampling_point_id',
+    ];
 
     protected $casts = [
         'recorded_at' => 'datetime',
+        'tss' => 'float',
+        'ph' => 'float',
+        'tds' => 'float',
+        'dissolved_oxygen' => 'float',
+        'temperature' => 'float',
+        'clarity_cm' => 'float',
     ];
 
     public function recorder(): BelongsTo

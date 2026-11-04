@@ -8,8 +8,8 @@ use Carbon\Carbon;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportAction;
 use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
@@ -31,10 +31,30 @@ class WaterQualityRecordsTable
                     ->label('Titik Sample')
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('tss')
+                    ->label('TSS (mg/L)')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('ph')
                     ->label('pH')
                     ->numeric()
                     ->sortable(),
+                TextColumn::make('tds')
+                    ->label('TDS (mg/L)')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('dissolved_oxygen')
+                    ->label('DO (mg/L)')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('temperature')
+                    ->label('Suhu (°C)')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('clarity_cm')
                     ->label('Kejernihan (cm)')
                     ->numeric()
@@ -48,6 +68,7 @@ class WaterQualityRecordsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('recorded_at', 'desc')
             ->filters([
                 SelectFilter::make('water_sampling_point_id')
                     ->label('Titik Pengambilan Sample')
