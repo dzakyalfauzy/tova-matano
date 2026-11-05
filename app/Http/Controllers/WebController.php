@@ -19,6 +19,7 @@ use App\Models\SiteSettings;
 use App\Models\Volunteer;
 use App\Models\WaterQualityRecord;
 use App\Models\WaterSamplingPoint;
+use App\Services\WaterQualityAssessmentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -232,19 +233,60 @@ class WebController extends Controller
                 ->implode(', '))
             ->first();
 
+        /** @var WaterQualityAssessmentService $assessmentService */
+        $assessmentService = app(WaterQualityAssessmentService::class);
+        $allResearchReferences = $assessmentService->getActiveReferences();
+
         $summary = [];
 
         foreach (config('water_quality.parameters') as $key => $parameter) {
             $average = $aggregates?->{"avg_{$key}"};
             $average = $average !== null ? round((float) $average, $parameter['decimals']) : null;
 
+            $assessment = $assessmentService->assess($key, $average, $parameter);
+
+            // Fetch all study-specific research references for this parameter (both provisional and verified)
+            $paramReferences = $allResearchReferences
+                ->where('parameter', $key)
+                ->values()
+                ->toArray();
+
             $summary[$key] = [
                 'key' => $key,
                 ...$parameter,
                 'average' => $average,
                 'count' => (int) ($aggregates?->{"count_{$key}"} ?? 0),
-                'status' => $this->waterQualityStatus($parameter, $average),
+                'status' => $assessment['status'],
+                'status_key' => $assessment['status_key'],
+                'status_label' => $assessment['label'],
+                'status_label_id' => $assessment['label_id'],
+                'status_badge' => $assessment['badge'],
+                'status_dot' => $assessment['dot'],
+                'status_message' => $assessment['message'],
+                'comparison_reference' => $assessment['reference'],
+                'research_references' => $paramReferences,
             ];
+        }
+
+        // Global KPI counts based on transparent research-based metrics
+        $kpis = [
+            'total_measurements' => $records->count(),
+            'within_reference' => 0,
+            'outside_reference' => 0,
+            'operational_alerts' => 0,
+            'insufficient_reference' => 0,
+            'not_assessed' => 0,
+        ];
+
+        foreach ($summary as $item) {
+            match ($item['status']) {
+                'within_reference' => $kpis['within_reference']++,
+                'outside_reference' => $kpis['outside_reference']++,
+                'operational_alert' => $kpis['operational_alerts']++,
+                'insufficient_reference' => $kpis['insufficient_reference']++,
+                'not_assessed' => $kpis['not_assessed']++,
+                default => null,
+            };
         }
 
         return Inertia::render('WaterQuality', [
@@ -252,6 +294,8 @@ class WebController extends Controller
             'paginatedRecords' => $paginatedRecords,
             'samplingPoints' => WaterSamplingPoint::where('is_active', true)->orderBy('name')->get(),
             'summary' => $summary,
+            'kpis' => $kpis,
+            'allResearchReferences' => $allResearchReferences,
             'waterQualityConfig' => config('water_quality'),
             'filters' => [
                 'sampling_point' => $samplingPointId ?? 'all',
@@ -264,78 +308,17 @@ class WebController extends Controller
     }
 
     /**
-     * Tentukan status rata-rata/parameter terhadap ambang pada config/water_quality.php.
+     * Tentukan status rata-rata/parameter terhadap ambang riset Danau Matano.
      *
      * @param  array<string, mixed>  $parameter
      */
     private function waterQualityStatus(array $parameter, ?float $value): string
     {
-        if ($value === null) {
-            return 'no_data';
-        }
+        /** @var WaterQualityAssessmentService $assessmentService */
+        $assessmentService = app(WaterQualityAssessmentService::class);
+        $res = $assessmentService->assess($parameter['key'] ?? '', $value, $parameter);
 
-        $min = $parameter['min'] ?? null;
-        $max = $parameter['max'] ?? null;
-        $warningMin = $parameter['warning_min'] ?? null;
-        $warningMax = $parameter['warning_max'] ?? null;
-
-        switch ($parameter['threshold_type']) {
-            case 'maximum':
-                if ($max !== null && $value > $max) {
-                    return 'abnormal';
-                }
-
-                if ($warningMax !== null && $value > $warningMax) {
-                    return 'warning';
-                }
-
-                return 'normal';
-
-            case 'minimum':
-                if ($min !== null && $value < $min) {
-                    return 'abnormal';
-                }
-
-                if ($warningMin !== null && $value < $warningMin) {
-                    return 'warning';
-                }
-
-                return 'normal';
-
-            case 'range':
-                if (($min !== null && $value < $min) || ($max !== null && $value > $max)) {
-                    return 'abnormal';
-                }
-
-                if (($warningMin !== null && $value < $warningMin) || ($warningMax !== null && $value > $warningMax)) {
-                    return 'warning';
-                }
-
-                return 'normal';
-
-            case 'deviation':
-                $baseline = $parameter['baseline'] ?? null;
-                $maxDeviation = $parameter['max_deviation'] ?? null;
-
-                if ($baseline === null || $maxDeviation === null) {
-                    return 'unassessed';
-                }
-
-                $deviation = abs($value - (float) $baseline);
-
-                if ($deviation > $maxDeviation) {
-                    return 'abnormal';
-                }
-
-                if ($deviation > $maxDeviation * 0.8) {
-                    return 'warning';
-                }
-
-                return 'normal';
-
-            default:
-                return 'unassessed';
-        }
+        return $res['status'];
     }
 
     public function joinAndDonate()

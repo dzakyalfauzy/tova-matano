@@ -1,6 +1,6 @@
 <?php
 
-//use Astrotomic\Translatable\Validation\RuleFactory;
+// use Astrotomic\Translatable\Validation\RuleFactory;
 
 return [
 

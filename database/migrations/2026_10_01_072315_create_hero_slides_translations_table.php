@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('hero_slide_id')->constrained()->cascadeOnDelete();
             $table->string('locale')->index();
-            
+
             $table->string('title')->nullable();
             $table->string('subtitle')->nullable();
             $table->string('cta_label')->nullable();
-            
+
             $table->unique(['hero_slide_id', 'locale']);
         });
 

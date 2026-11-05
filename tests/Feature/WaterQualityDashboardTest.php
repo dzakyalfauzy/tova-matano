@@ -2,10 +2,14 @@
 
 use App\Filament\Resources\WaterQualityRecords\Pages\CreateWaterQualityRecord;
 use App\Filament\Resources\WaterQualityRecords\Pages\EditWaterQualityRecord;
-use App\Filament\Resources\WaterQualityRecords\Pages\ListWaterQualityRecords;
+use App\Filament\Resources\WaterQualityResearchReferences\Pages\CreateWaterQualityResearchReference;
+use App\Filament\Resources\WaterQualityResearchReferences\Pages\ListWaterQualityResearchReferences;
 use App\Models\User;
 use App\Models\WaterQualityRecord;
+use App\Models\WaterQualityResearchReference;
 use App\Models\WaterSamplingPoint;
+use App\Services\WaterQualityAssessmentService;
+use Database\Seeders\WaterQualityResearchReferenceSeeder;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -52,7 +56,7 @@ it('adds nullable monitoring columns and keeps legacy records intact', function 
         ->and($legacy->temperature)->toBeNull();
 });
 
-it('renders the dashboard with six parameter datasets and averages that ignore nulls', function () {
+it('renders the research-based dashboard with six parameter datasets and averages that ignore nulls', function () {
     $point = wqSamplingPoint();
 
     wqRecord([
@@ -83,13 +87,14 @@ it('renders the dashboard with six parameter datasets and averages that ignore n
         ->component('WaterQuality')
         ->has('records', 2)
         ->has('summary', 6)
+        ->has('kpis')
         ->has('waterQualityConfig.parameters', 6)
         ->has('perPageOptions', 4)
         ->has('paginatedRecords.data', 2)
         ->where('filters.per_page', 10)
         ->where('waterQualityConfig.parameters.tss.unit', 'mg/L')
-        ->where('waterQualityConfig.parameters.ph.threshold_type', 'range')
-        ->where('waterQualityConfig.parameters.clarity_cm.threshold_type', 'none')
+        ->where('waterQualityConfig.parameters.ph.unit', 'pH')
+        ->where('waterQualityConfig.parameters.clarity_cm.unit', 'cm')
     );
 
     $props = $response->inertiaProps();
@@ -234,6 +239,152 @@ it('handles an empty dataset without producing averages or statuses from zero', 
         ->and($props['summary']['temperature']['status'])->toBe('no_data');
 });
 
+// 1. Correct classification within a compatible research range
+it('classifies measurement as within research reference when within verified range', function () {
+    WaterQualityResearchReference::create([
+        'source_id' => 'TEST-VERIFIED-PH',
+        'title' => 'Studi Terverifikasi Danau Matano',
+        'authors' => 'Sentosa dkk.',
+        'publication_year' => 2017,
+        'parameter' => 'ph',
+        'reported_minimum' => 7.5,
+        'reported_maximum' => 8.5,
+        'unit' => 'pH',
+        'research_type' => 'field',
+        'verification_status' => 'verified',
+        'is_active_for_comparison' => true,
+    ]);
+
+    $service = new WaterQualityAssessmentService;
+    $res = $service->assess('ph', 7.8, config('water_quality.parameters.ph'));
+
+    expect($res['status'])->toBe('within_reference')
+        ->and($res['label_id'])->toBe('Dalam Rentang Referensi Penelitian')
+        ->and($res['reference'])->not->toBeNull();
+});
+
+// 2. Correct classification outside a compatible research range
+it('classifies measurement as outside research reference when outside verified range', function () {
+    WaterQualityResearchReference::create([
+        'source_id' => 'TEST-VERIFIED-PH-OUT',
+        'title' => 'Studi Terverifikasi Danau Matano',
+        'authors' => 'Sentosa dkk.',
+        'publication_year' => 2017,
+        'parameter' => 'ph',
+        'reported_minimum' => 7.5,
+        'reported_maximum' => 8.5,
+        'unit' => 'pH',
+        'research_type' => 'field',
+        'verification_status' => 'verified',
+        'is_active_for_comparison' => true,
+    ]);
+
+    $service = new WaterQualityAssessmentService;
+    $res = $service->assess('ph', 9.2, config('water_quality.parameters.ph'));
+
+    expect($res['status'])->toBe('outside_reference')
+        ->and($res['label_id'])->toBe('Di Luar Rentang Referensi Penelitian')
+        ->and($res['message'])->toContain('Diperlukan pemeriksaan lebih lanjut');
+});
+
+// 3. Unverified or provisional sources do not determine assessment statuses
+it('does not allow unverified or provisional sources to determine public assessment statuses', function () {
+    WaterQualityResearchReference::create([
+        'source_id' => 'TEST-PROVISIONAL-TSS',
+        'title' => 'Studi Belum Terverifikasi',
+        'authors' => 'Anonim',
+        'publication_year' => 2020,
+        'parameter' => 'tss',
+        'reported_minimum' => 1.0,
+        'reported_maximum' => 5.0,
+        'unit' => 'mg/L',
+        'research_type' => 'laboratory',
+        'verification_status' => 'provisional',
+        'is_active_for_comparison' => true,
+    ]);
+
+    $service = new WaterQualityAssessmentService;
+    $res = $service->assess('tss', 3.0, config('water_quality.parameters.tss'));
+
+    expect($res['status'])->toBe('insufficient_reference')
+        ->and($res['label_id'])->toBe('Referensi Penelitian Belum Memadai');
+});
+
+// 4. Remote-sensing references are not compared with incompatible laboratory measurements
+it('does not compare remote sensing satellite estimates with direct measurements', function () {
+    WaterQualityResearchReference::create([
+        'source_id' => 'TEST-SATELLITE-TSS',
+        'title' => 'Estimasi Satelit Citra',
+        'authors' => 'Jaelani dkk.',
+        'publication_year' => 2018,
+        'parameter' => 'tss',
+        'reported_minimum' => 1.0,
+        'reported_maximum' => 60.0,
+        'unit' => 'mg/m³',
+        'research_type' => 'remote_sensing',
+        'verification_status' => 'verified',
+        'is_active_for_comparison' => true,
+    ]);
+
+    $service = new WaterQualityAssessmentService;
+    $res = $service->assess('tss', 5.0, config('water_quality.parameters.tss'));
+
+    expect($res['status'])->toBe('insufficient_reference');
+});
+
+// 5. Unit conversion is explicitly handled and incompatible units are rejected
+it('rejects comparison when units do not match directly', function () {
+    WaterQualityResearchReference::create([
+        'source_id' => 'TEST-WRONG-UNIT',
+        'title' => 'Studi Satuan Berbeda',
+        'authors' => 'Riset X',
+        'publication_year' => 2021,
+        'parameter' => 'tds',
+        'reported_minimum' => 10.0,
+        'reported_maximum' => 50.0,
+        'unit' => 'ppm_m3',
+        'research_type' => 'field',
+        'verification_status' => 'verified',
+        'is_active_for_comparison' => true,
+    ]);
+
+    $service = new WaterQualityAssessmentService;
+    $res = $service->assess('tds', 25.0, config('water_quality.parameters.tds'));
+
+    expect($res['status'])->toBe('insufficient_reference');
+});
+
+// 6 & 7. Temperature without a validated local baseline returns Not Assessed
+it('returns Not Assessed for temperature when validated local baseline does not exist', function () {
+    $service = new WaterQualityAssessmentService;
+    $res = $service->assess('temperature', 28.5, config('water_quality.parameters.temperature'));
+
+    expect($res['status'])->toBe('not_assessed')
+        ->and($res['label_id'])->toBe('Belum Dapat Dinilai')
+        ->and($res['message'])->toContain('baseline');
+});
+
+// 8. Water clarity without validated threshold does not return pollution status
+it('does not label water clarity as abnormal or polluted without validated reference', function () {
+    $service = new WaterQualityAssessmentService;
+    $res = $service->assess('clarity_cm', 350, config('water_quality.parameters.clarity_cm'));
+
+    expect($res['status'])->toBe('insufficient_reference')
+        ->and($res['status'])->not->toBe('abnormal')
+        ->and($res['status'])->not->toBe('polluted');
+});
+
+// 9. Multiple study ranges are preserved separately in research references
+it('preserves multiple study ranges separately for the same parameter', function () {
+    $this->seed(WaterQualityResearchReferenceSeeder::class);
+    $refs = WaterQualityResearchReference::forParameter('temperature')->get();
+
+    expect($refs->count())->toBeGreaterThanOrEqual(2);
+    $authors = $refs->pluck('authors')->toArray();
+    expect($authors)->toContain('Sentosa, A. A., Hedianto, D. A., & Satria, H.');
+});
+
+// 10. Admin creates and updates WaterQualityRecord
 it('creates a record with all six parameters from the admin panel', function () {
     $this->actingAs(User::factory()->create());
     Filament::setCurrentPanel('admin');
@@ -317,11 +468,33 @@ it('updates monitoring values from the admin panel without losing existing pH an
         ->and($fresh->clarity_cm)->toEqual(430.0);
 });
 
-it('loads the admin list page with the extended columns and export action', function () {
+// 11. Admin CRUD for WaterQualityResearchReference
+it('supports managing water quality research references in admin panel', function () {
     $this->actingAs(User::factory()->create());
     Filament::setCurrentPanel('admin');
 
-    wqRecord(['tss' => 15, 'tds' => 200, 'dissolved_oxygen' => 7, 'temperature' => 28]);
+    Livewire::test(ListWaterQualityResearchReferences::class)->assertOk();
 
-    Livewire::test(ListWaterQualityRecords::class)->assertOk();
+    Livewire::test(CreateWaterQualityResearchReference::class)
+        ->fillForm([
+            'source_id' => 'ADMIN-TEST-REF',
+            'title' => 'Studi Limnologi Baru',
+            'authors' => 'Pakar Danau',
+            'publication_year' => 2024,
+            'parameter' => 'ph',
+            'reported_minimum' => 7.0,
+            'reported_maximum' => 8.0,
+            'unit' => 'pH',
+            'research_type' => 'field',
+            'verification_status' => 'verified',
+            'is_active_for_comparison' => true,
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors();
+
+    $this->assertDatabaseHas('water_quality_research_references', [
+        'source_id' => 'ADMIN-TEST-REF',
+        'authors' => 'Pakar Danau',
+        'verification_status' => 'verified',
+    ]);
 });

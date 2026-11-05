@@ -20,7 +20,7 @@ class VolunteerRegistrationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pendaftaran Relawan TMCC - ' . $this->registrationCode,
+            subject: 'Pendaftaran Relawan TMCC - '.$this->registrationCode,
         );
     }
 

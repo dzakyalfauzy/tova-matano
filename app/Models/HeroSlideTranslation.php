@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class HeroSlideTranslation extends Model
 {
     public $timestamps = false;
+
     protected $fillable = ['title', 'subtitle', 'cta_label'];
 }

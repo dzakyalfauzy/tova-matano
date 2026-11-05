@@ -21,7 +21,7 @@ class ContactFormMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pesan dari Formulir Kontak TMCC - ' . $this->name,
+            subject: 'Pesan dari Formulir Kontak TMCC - '.$this->name,
         );
     }
 

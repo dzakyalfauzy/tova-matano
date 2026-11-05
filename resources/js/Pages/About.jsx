@@ -155,10 +155,10 @@ export default function About({ founders, settings }) {
                         <p className="text-gray-600 max-w-2xl mx-auto">Merekalah yang meletakkan batu pertama perjuangan pelestarian Danau Matano.</p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="flex flex-wrap justify-center gap-8">
                         {founders && founders.length > 0 ? (
                             founders.map(founder => (
-                                <div key={founder.id} className="group">
+                                <div key={founder.id} className="group w-full max-w-[280px]">
                                     <div className="relative overflow-hidden rounded-xl aspect-[3/4] mb-4 bg-gray-100">
                                         {founder.photo_url ? (
                                             <img 
@@ -183,7 +183,7 @@ export default function About({ founders, settings }) {
                                 </div>
                             ))
                         ) : (
-                            <div className="col-span-full text-center py-12 text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                            <div className="w-full text-center py-12 text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
                                 Data pendiri belum ditambahkan.
                             </div>
                         )}
