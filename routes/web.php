@@ -25,6 +25,7 @@ Route::get('/kontak', [WebController::class, 'contact'])->name('contact');
 
 // Breeze default routes (kept for dashboard if needed, though Filament handles admin)
 Route::middleware('auth')->group(function () {
+    Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
