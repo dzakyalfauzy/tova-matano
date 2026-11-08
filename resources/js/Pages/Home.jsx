@@ -32,11 +32,10 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
 
             {/* Hero Slider Area */}
             {slides && slides.length > 0 ? (
-                <div className="relative h-[80vh] md:h-[600px] w-full overflow-hidden bg-brand-navy">
-                    {/* Teks Tetap: Layer statis di atas slider (di luar loop slide) */}
+                <div className="relative aspect-[16/9] md:aspect-auto md:h-[600px] w-full overflow-hidden bg-brand-navy">
                     {staticFixedText && (
-                        <div className="absolute top-8 md:top-12 lg:top-14 left-0 right-0 z-30 pointer-events-none text-center px-4">
-                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white tracking-wide [text-shadow:_0_2px_6px_rgba(0,0,0,0.9),_0_4px_16px_rgba(0,0,0,0.8)]">
+                        <div className="absolute top-4 sm:top-6 md:top-12 lg:top-14 left-0 right-0 z-30 pointer-events-none text-center px-4">
+                            <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl font-heading font-bold text-white tracking-wide [text-shadow:_0_2px_6px_rgba(0,0,0,0.9),_0_4px_16px_rgba(0,0,0,0.8)]">
                                 {staticFixedText}
                             </h1>
                         </div>
@@ -52,23 +51,23 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
                             <img
                                 src={`/storage/${slide.image_url}`}
                                 alt={slide.title || 'Hero Slide'}
-                                className="object-cover w-full h-full"
+                                className="w-full h-full object-cover md:object-cover object-center"
                             />
-                            <div className={`absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 ${staticFixedText ? 'pt-20 md:pt-28' : 'pt-8'}`}>
+                            <div className={`absolute inset-0 z-20 flex flex-col justify-end sm:justify-center items-center text-center px-4 pb-10 sm:pb-0 ${staticFixedText ? 'pt-12 sm:pt-16 md:pt-28' : 'pt-4 sm:pt-8'}`}>
                                 {slide.title && (
-                                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-heading font-semibold text-white mb-3 max-w-4xl [text-shadow:_0_2px_4px_rgba(0,0,0,0.9),_0_4px_12px_rgba(0,0,0,0.7)]">
+                                    <h2 className="text-sm sm:text-xl md:text-3xl lg:text-4xl font-heading font-semibold text-white mb-1 sm:mb-3 max-w-4xl [text-shadow:_0_2px_4px_rgba(0,0,0,0.9),_0_4px_12px_rgba(0,0,0,0.7)]">
                                         {slide.title}
                                     </h2>
                                 )}
                                 {slide.subtitle && (
-                                    <p className="text-base sm:text-lg md:text-xl text-white mb-6 max-w-3xl [text-shadow:_0_1px_3px_rgba(0,0,0,0.9),_0_2px_8px_rgba(0,0,0,0.7)]">
+                                    <p className="text-xs sm:text-base md:text-xl text-white mb-2 sm:mb-6 max-w-3xl [text-shadow:_0_1px_3px_rgba(0,0,0,0.9),_0_2px_8px_rgba(0,0,0,0.7)] line-clamp-2 sm:line-clamp-none">
                                         {slide.subtitle}
                                     </p>
                                 )}
                                 {slide.cta_label && slide.cta_url && (
                                     <a
                                         href={slide.cta_url}
-                                        className="px-8 py-3 bg-brand-gold text-brand-navy font-bold rounded hover:bg-amber-400 transition-colors shadow-lg pointer-events-auto"
+                                        className="px-4 sm:px-8 py-2 sm:py-3 text-sm sm:text-base bg-brand-gold text-brand-navy font-bold rounded hover:bg-amber-400 transition-colors shadow-lg pointer-events-auto"
                                     >
                                         {slide.cta_label}
                                     </a>
@@ -82,24 +81,24 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
                         <>
                             <button
                                 onClick={prevSlide}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full transition-colors"
+                                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 p-1.5 sm:p-2 bg-black/30 hover:bg-black/50 text-white rounded-full transition-colors"
                             >
-                                <ChevronLeft size={24} />
+                                <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6" />
                             </button>
                             <button
                                 onClick={nextSlide}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full transition-colors"
+                                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 p-1.5 sm:p-2 bg-black/30 hover:bg-black/50 text-white rounded-full transition-colors"
                             >
-                                <ChevronRight size={24} />
+                                <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6" />
                             </button>
                             
                             {/* Indicators */}
-                            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex space-x-2">
+                            <div className="absolute bottom-2 sm:bottom-6 left-1/2 -translate-x-1/2 z-30 flex space-x-1.5 sm:space-x-2">
                                 {slides.map((_, index) => (
                                     <button
                                         key={index}
                                         onClick={() => setCurrentSlide(index)}
-                                        className={`w-3 h-3 rounded-full transition-colors ${
+                                        className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-colors ${
                                             index === currentSlide ? 'bg-brand-gold' : 'bg-white/50 hover:bg-white'
                                         }`}
                                     />
@@ -119,18 +118,15 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
 
             {/* Running Text Area */}
             {runningTexts && runningTexts.length > 0 && (
-                <div className="bg-brand-navy border-y border-brand-gold/30 text-brand-gold py-3 overflow-hidden flex whitespace-nowrap group">
-                    <div className="animate-marquee flex gap-12 pr-12 group-hover:[animation-play-state:paused]">
-                        {/* Render teks */}
-                        <p className="font-bold text-lg tracking-widest uppercase">
+                <div className="bg-brand-navy border-y border-brand-gold/30 text-brand-gold py-1.5 sm:py-2 md:py-3 overflow-hidden flex items-center whitespace-nowrap group">
+                    <div className="animate-marquee flex gap-6 sm:gap-8 md:gap-12 pr-6 sm:pr-8 md:pr-12 group-hover:[animation-play-state:paused]">
+                        <p className="font-bold text-[11px] sm:text-sm md:text-lg tracking-wide md:tracking-widest uppercase">
                             {runningTexts.map(text => text.text).join('   •   ')}
                         </p>
-                        {/* Copy pertama supaya mulus */}
-                        <p className="font-bold text-lg tracking-widest uppercase">
+                        <p className="font-bold text-[11px] sm:text-sm md:text-lg tracking-wide md:tracking-widest uppercase">
                             {runningTexts.map(text => text.text).join('   •   ')}
                         </p>
-                        {/* Copy kedua supaya super mulus di layar ultra wide */}
-                        <p className="font-bold text-lg tracking-widest uppercase">
+                        <p className="font-bold text-[11px] sm:text-sm md:text-lg tracking-wide md:tracking-widest uppercase">
                             {runningTexts.map(text => text.text).join('   •   ')}
                         </p>
                     </div>
