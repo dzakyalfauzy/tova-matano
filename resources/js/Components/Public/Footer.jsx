@@ -12,7 +12,7 @@ export default function Footer({ settings }) {
                     <div className="col-span-1 md:col-span-1">
                         <h3 className="font-heading font-bold text-2xl text-brand-gold mb-4">TMCC</h3>
                         <p className="text-gray-300 text-sm leading-relaxed mb-6">
-                            Tova Matano Care Center (TMCC) adalah organisasi peduli lingkungan yang berfokus pada pemulihan dan pelestarian Danau Matano dari ancaman pencemaran.
+                            Tova Matano Care Center adalah organisasi peduli lingkungan yang berfokus pada pemulihan dan pelestarian Danau Matano dari ancaman pencemaran, melalui edukasi, aksi lapangan, dan kolaborasi bersama masyarakat sekitar.
                         </p>
                         <div className="flex space-x-4">
                             {settings?.instagram_url && (
@@ -43,11 +43,13 @@ export default function Footer({ settings }) {
                         <h4 className="font-heading font-semibold text-lg mb-4 text-brand-paper">Tautan Cepat</h4>
                         <ul className="space-y-2 text-sm">
                             <li><Link href="/tentang" className="text-gray-300 hover:text-brand-gold transition-colors">Tentang Kami</Link></li>
+                            <li><Link href="/program" className="text-gray-300 hover:text-brand-gold transition-colors">Program</Link></li>
+                            <li><Link href="/kualitas-air" className="text-gray-300 hover:text-brand-gold transition-colors">Kualitas Air</Link></li>
+                            <li><Link href="/galeri" className="text-gray-300 hover:text-brand-gold transition-colors">Galeri</Link></li>
+                            <li><Link href="/blog" className="text-gray-300 hover:text-brand-gold transition-colors">Berita</Link></li>
                             <li><Link href="/struktur-organisasi" className="text-gray-300 hover:text-brand-gold transition-colors">Struktur Organisasi</Link></li>
                             <li><Link href="/anggota" className="text-gray-300 hover:text-brand-gold transition-colors">Anggota & Relawan</Link></li>
-                            <li><Link href="/program" className="text-gray-300 hover:text-brand-gold transition-colors">Program Utama</Link></li>
-                            <li><Link href="/galeri" className="text-gray-300 hover:text-brand-gold transition-colors">Galeri Dokumentasi</Link></li>
-                            <li><Link href="/blog" className="text-gray-300 hover:text-brand-gold transition-colors">Berita & Edukasi</Link></li>
+                            <li><Link href="/partnership" className="text-gray-300 hover:text-brand-gold transition-colors">Partnership</Link></li>
                             <li><Link href="/kontak" className="text-gray-300 hover:text-brand-gold transition-colors">Hubungi Kami</Link></li>
                         </ul>
                     </div>

@@ -12,7 +12,7 @@ export default function Programs({ programs, settings }) {
                 <div className="max-w-4xl mx-auto px-4">
                     <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-gold mb-4">Program Kami</h1>
                     <p className="text-xl text-gray-200">
-                        Empat pilar aksi nyata TMCC dalam menjaga dan memulihkan ekosistem Danau Matano.
+                        Empat pilar aksi nyata TMCC dalam menjaga kelestarian Danau Matano.
                     </p>
                 </div>
             </div>

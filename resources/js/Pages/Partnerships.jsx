@@ -27,7 +27,7 @@ export default function Partnerships({ partnerships, settings }) {
                 <div className="max-w-4xl mx-auto px-4">
                     <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-gold mb-4">Partnership</h1>
                     <p className="text-xl text-gray-200">
-                        Mitra dan pendukung yang telah berkontribusi bersama Tova Matano Care Center.
+                        Mitra dan pendukung yang telah bekerjasama dan berkontribusi bersama Tova Matano Care Center.
                     </p>
                 </div>
             </div>

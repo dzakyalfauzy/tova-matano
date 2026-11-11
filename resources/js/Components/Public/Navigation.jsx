@@ -10,13 +10,13 @@ export default function Navigation() {
     const navLinks = [
         { name: t.nav_home, href: '/' },
         { name: t.nav_about, href: '/tentang' },
-        { name: t.nav_organization, href: '/struktur-organisasi' },
-        { name: t.nav_members, href: '/anggota' },
-        { name: t.nav_partnership, href: '/partnership' },
         { name: t.nav_program, href: '/program' },
         { name: t.nav_water, href: '/kualitas-air' },
         { name: t.nav_gallery, href: '/galeri' },
         { name: t.nav_blog, href: '/blog' },
+        { name: t.nav_organization, href: '/struktur-organisasi' },
+        { name: t.nav_members, href: '/anggota' },
+        { name: t.nav_partnership, href: '/partnership' },
         { name: t.nav_contact, href: '/kontak' },
     ];
 
