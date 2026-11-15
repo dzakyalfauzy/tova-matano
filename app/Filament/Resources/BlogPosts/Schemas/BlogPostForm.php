@@ -41,6 +41,7 @@ class BlogPostForm
                                 'RILIS_PERS' => 'Rilis Pers',
                                 'BERITA' => 'Berita',
                                 'KEBIJAKAN' => 'Kebijakan',
+                                'CERITA' => 'Cerita',
                                 'BASELINE_STUDY' => 'Baseline Study',
                             ])
                             ->required(),

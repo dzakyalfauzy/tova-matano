@@ -36,19 +36,19 @@ export default function Navigation() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
-                        <Link href="/" className="flex items-center gap-3 flex-shrink-0">
+                        <Link href="/" className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
                             <img
                                 src="/image/logo_tova_matano.png"
                                 alt="Logo Tova Matano Care Center"
-                                className="h-9 w-auto"
+                                className="h-9 w-auto object-contain sm:h-10"
                             />
-                            <span className="font-heading font-bold text-xl tracking-wide text-brand-paper hover:text-brand-gold transition-colors hidden sm:block">
+                            <span className="font-heading font-bold text-sm leading-tight tracking-wide text-brand-paper hover:text-brand-gold transition-colors sm:text-base md:text-lg lg:text-xl">
                                 Tova Matano Care Center
                             </span>
                         </Link>
 
                         {/* Desktop: Language + CTA */}
-                        <div className="hidden md:flex items-center gap-3">
+                        <div className="hidden xl:flex items-center gap-3">
                             {/* Language Switcher */}
                             <div className="flex items-center border border-white/20 rounded-lg overflow-hidden">
                                 <button
@@ -90,7 +90,7 @@ export default function Navigation() {
                         </div>
 
                         {/* Mobile: Language + Hamburger */}
-                        <div className="md:hidden flex items-center gap-2">
+                        <div className="xl:hidden flex items-center gap-2">
                             <div className="flex items-center border border-white/20 rounded-lg overflow-hidden">
                                 <button
                                     onClick={() => switchLocale('id')}
@@ -121,7 +121,7 @@ export default function Navigation() {
             </div>
 
             {/* Bottom bar: Nav Links (desktop only) */}
-            <div className="hidden md:block bg-brand-navy/80 backdrop-blur-sm">
+            <div className="hidden xl:block bg-brand-navy/80 backdrop-blur-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center gap-1">
                         {navLinks.map((link) => (
@@ -144,9 +144,9 @@ export default function Navigation() {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+            {/* Mobile / Tablet Menu */}
             {isOpen && (
-                <div className="md:hidden bg-brand-navy border-t border-white/10">
+                <div className="xl:hidden bg-brand-navy border-t border-white/10">
                     <div className="px-3 pt-2 pb-4 space-y-1">
                         {navLinks.map((link) => (
                             <Link

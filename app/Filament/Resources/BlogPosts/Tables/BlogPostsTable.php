@@ -57,6 +57,7 @@ class BlogPostsTable
                         'RILIS_PERS' => 'Rilis Pers',
                         'BERITA' => 'Berita',
                         'KEBIJAKAN' => 'Kebijakan',
+                        'CERITA' => 'Cerita',
                         'BASELINE_STUDY' => 'Baseline Study',
                     ]),
                 TernaryFilter::make('is_published')

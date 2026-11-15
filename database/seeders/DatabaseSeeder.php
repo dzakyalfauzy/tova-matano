@@ -187,7 +187,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'slug' => 'biodiversity-watch',
-                'name' => 'Biodiversity Watch',
+                'name' => 'Tova Campaign & Event',
                 'description' => 'Pemantauan keanekaragaman hayati endemik Danau Matano termasuk ikan, moluska, dan tumbuhan air. Berkontribusi pada data konservasi nasional.',
                 'order' => 4,
             ],
@@ -274,7 +274,7 @@ class DatabaseSeeder extends Seeder
                 'published_at' => now()->subDays(60),
                 'is_published' => true,
             ],
-            // Biodiversity Watch
+            // Tova Campaign & Event
             [
                 'program_id' => $p4?->id,
                 'title' => 'Survei Populasi Ikan Butini di Danau Matano',

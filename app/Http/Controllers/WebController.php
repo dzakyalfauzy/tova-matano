@@ -29,12 +29,21 @@ class WebController extends Controller
 {
     private function settings()
     {
-        return SiteSettings::first();
+        return SiteSettings::first()?->makeHidden(['about_content']);
     }
 
     public function home()
     {
         $settings = $this->settings();
+
+        $waterAvgs = WaterQualityRecord::selectRaw('
+            AVG(ph) as avg_ph,
+            AVG(clarity_cm) as avg_clarity,
+            AVG(tss) as avg_tss,
+            AVG(tds) as avg_tds,
+            AVG(dissolved_oxygen) as avg_do,
+            AVG(temperature) as avg_temp
+        ')->first();
 
         return Inertia::render('Home', [
             'slides' => HeroSlide::where('is_active', true)->orderBy('order')->get(),
@@ -48,18 +57,53 @@ class WebController extends Controller
                 'relawan_aktif' => Member::count() + Volunteer::where('status', 'APPROVED')->count(),
                 'program_terlaksana' => Program::count(),
                 'sampah_terangkut' => $settings->stat_sampah_terangkut ?? '2,4T',
-                'rata_rata_ph' => WaterQualityRecord::avg('ph') ? number_format(WaterQualityRecord::avg('ph'), 2) : '—',
-                'rata_rata_kejernihan' => WaterQualityRecord::avg('clarity_cm') ? number_format(WaterQualityRecord::avg('clarity_cm') / 100, 2) : '—',
+                'rata_rata_ph' => $waterAvgs?->avg_ph !== null ? number_format((float) $waterAvgs->avg_ph, 2) : '—',
+                'rata_rata_kejernihan' => $waterAvgs?->avg_clarity !== null ? number_format((float) $waterAvgs->avg_clarity / 100, 2) : '—',
+                'rata_rata_tss' => $waterAvgs?->avg_tss !== null ? number_format((float) $waterAvgs->avg_tss, 1) : '—',
+                'rata_rata_tds' => $waterAvgs?->avg_tds !== null ? number_format((float) $waterAvgs->avg_tds, 1) : '—',
+                'rata_rata_do' => $waterAvgs?->avg_do !== null ? number_format((float) $waterAvgs->avg_do, 2) : '—',
+                'rata_rata_suhu' => $waterAvgs?->avg_temp !== null ? number_format((float) $waterAvgs->avg_temp, 1) : '—',
             ],
         ]);
     }
 
     public function about()
     {
+        $settings = $this->settings();
+        $locale = app()->getLocale();
+
+        $aboutContent = ($settings ?? new SiteSettings)->getAboutContent($locale);
+
         return Inertia::render('About', [
             'founders' => Founder::orderBy('order')->get(),
-            'settings' => $this->settings(),
+            'settings' => $settings,
+            'aboutContent' => $this->gateAboutLegalContent($settings, $aboutContent),
+            'aboutLakeImageCredit' => $settings?->about_lake_image_credit,
         ]);
+    }
+
+    /**
+     * Empty unverified legal items before they reach the public browser.
+     *
+     * @param  array<string, mixed>  $aboutContent
+     * @return array<string, mixed>
+     */
+    private function gateAboutLegalContent(?SiteSettings $settings, array $aboutContent): array
+    {
+        $items = $aboutContent['legal']['items'] ?? null;
+        $hasValidItems = is_string($items) && trim($items) !== '';
+        $isVerified = $settings?->about_legal_verified === true;
+
+        if (! $isVerified || ! $hasValidItems) {
+            $aboutContent['legal']['items'] = '';
+            $aboutContent['legal']['verified'] = false;
+
+            return $aboutContent;
+        }
+
+        $aboutContent['legal']['verified'] = true;
+
+        return $aboutContent;
     }
 
     public function organization()

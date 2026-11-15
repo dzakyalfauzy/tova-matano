@@ -8,6 +8,7 @@ const CATEGORIES = [
     { value: 'RILIS_PERS', label: 'Rilis Pers' },
     { value: 'BERITA', label: 'Berita' },
     { value: 'KEBIJAKAN', label: 'Kebijakan' },
+    { value: 'CERITA', label: 'Cerita' },
 ];
 
 const CATEGORY_COLORS = {
@@ -15,6 +16,7 @@ const CATEGORY_COLORS = {
     RILIS_PERS: 'bg-blue-100 text-blue-700',
     BERITA: 'bg-orange-100 text-orange-700',
     KEBIJAKAN: 'bg-purple-100 text-purple-700',
+    CERITA: 'bg-amber-100 text-amber-800',
     BASELINE_STUDY: 'bg-brand-gold/20 text-brand-navy border border-brand-gold/30',
 };
 
@@ -80,10 +82,22 @@ export default function Blog({ posts, filters, baselineStudyPosts, settings }) {
             <Head title={t.blog_title} />
 
             {/* Header */}
-            <div className="bg-brand-navy py-16 md:py-24 text-center border-b-4 border-brand-teal">
-                <div className="max-w-4xl mx-auto px-4">
-                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-gold mb-4">{t.blog_title}</h1>
-                    <p className="text-xl text-gray-200">{t.blog_subtitle}</p>
+            <div className="relative bg-brand-navy py-16 md:py-24 text-center border-b-4 border-brand-teal overflow-hidden">
+                <div className="absolute inset-0 z-0">
+                    {settings?.blog_hero_image_url ? (
+                        <img
+                            src={`/storage/${settings.blog_hero_image_url}`}
+                            alt="Background Tova Blog"
+                            className="w-full h-full object-cover opacity-30"
+                        />
+                    ) : (
+                        <div className="w-full h-full bg-brand-navy" />
+                    )}
+                    <div className="absolute inset-0 bg-brand-navy/80 mix-blend-multiply" />
+                </div>
+                <div className="max-w-4xl mx-auto px-4 relative z-10">
+                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-gold mb-4 drop-shadow-md">{t.blog_title}</h1>
+                    <p className="text-xl text-gray-200 drop-shadow">{t.blog_subtitle}</p>
                 </div>
             </div>
 

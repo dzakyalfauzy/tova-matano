@@ -27,10 +27,22 @@ export default function Contact({ settings }) {
             <Head title="Kontak TMCC" />
 
             {/* Header */}
-            <div className="bg-brand-navy py-16 md:py-24 text-center border-b-4 border-brand-teal">
-                <div className="max-w-4xl mx-auto px-4">
-                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-gold mb-4">Hubungi Kami</h1>
-                    <p className="text-xl text-gray-200">Ada pertanyaan atau ingin berkolaborasi? Kami siap mendengar.</p>
+            <div className="relative bg-brand-navy py-16 md:py-24 text-center border-b-4 border-brand-teal overflow-hidden">
+                <div className="absolute inset-0 z-0">
+                    {settings?.contact_hero_image_url ? (
+                        <img
+                            src={`/storage/${settings.contact_hero_image_url}`}
+                            alt="Background halaman Kontak"
+                            className="w-full h-full object-cover opacity-30"
+                        />
+                    ) : (
+                        <div className="w-full h-full bg-brand-navy" />
+                    )}
+                    <div className="absolute inset-0 bg-brand-navy/80 mix-blend-multiply" />
+                </div>
+                <div className="max-w-4xl mx-auto px-4 relative z-10">
+                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-gold mb-4 drop-shadow-md">Hubungi Kami</h1>
+                    <p className="text-xl text-gray-200 drop-shadow">Ada saran dan masukan, pertanyaan atau ingin berkolaborasi? Kami siap mendengar</p>
                 </div>
             </div>
 

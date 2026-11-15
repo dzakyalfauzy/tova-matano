@@ -1,6 +1,6 @@
 import PublicLayout from '@/Layouts/PublicLayout';
 import { Head, Link } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, Trophy, Medal } from 'lucide-react';
 import AboutSnippet from '@/Components/Public/AboutSnippet';
 
@@ -25,6 +25,35 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
     const prevSlide = () => {
         setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
     };
+
+    // Ensure sufficient items so each track's content is always wider than the viewport,
+    // preventing any trailing blank space even on ultrawide 21:9 displays.
+    const marqueeItems = useMemo(() => {
+        if (!runningTexts || runningTexts.length === 0) return [];
+        let list = runningTexts;
+        while (list.length < 16) {
+            list = [...list, ...runningTexts];
+        }
+        return list;
+    }, [runningTexts]);
+
+    const renderMarqueeTrack = (ariaHidden = false) => (
+        <div
+            aria-hidden={ariaHidden}
+            className="flex shrink-0 min-w-full items-center gap-8 md:gap-12 pr-8 md:pr-12 animate-marquee group-hover:[animation-play-state:paused]"
+        >
+            {marqueeItems.map((item, index) => (
+                <div key={index} className="inline-flex shrink-0 items-center gap-8 md:gap-12">
+                    <span className="font-bold text-[11px] sm:text-sm md:text-base tracking-wide md:tracking-widest uppercase">
+                        {item.text}
+                    </span>
+                    <span className="text-brand-gold/40 text-sm md:text-base select-none">
+                        •
+                    </span>
+                </div>
+            ))}
+        </div>
+    );
 
     return (
         <PublicLayout settings={settings}>
@@ -116,32 +145,75 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
                 </div>
             )}
 
-            {/* Running Text Area */}
+            {/* Running Text Area (Seamless Infinite Loop with 2 Identical Tracks) */}
             {runningTexts && runningTexts.length > 0 && (
-                <div className="bg-brand-navy border-y border-brand-gold/30 text-brand-gold py-1.5 sm:py-2 md:py-3 overflow-hidden flex items-center whitespace-nowrap group">
-                    <div className="animate-marquee flex gap-6 sm:gap-8 md:gap-12 pr-6 sm:pr-8 md:pr-12 group-hover:[animation-play-state:paused]">
-                        <p className="font-bold text-[11px] sm:text-sm md:text-lg tracking-wide md:tracking-widest uppercase">
-                            {runningTexts.map(text => text.text).join('   •   ')}
-                        </p>
-                        <p className="font-bold text-[11px] sm:text-sm md:text-lg tracking-wide md:tracking-widest uppercase">
-                            {runningTexts.map(text => text.text).join('   •   ')}
-                        </p>
-                        <p className="font-bold text-[11px] sm:text-sm md:text-lg tracking-wide md:tracking-widest uppercase">
-                            {runningTexts.map(text => text.text).join('   •   ')}
-                        </p>
-                    </div>
+                <div className="bg-brand-navy border-y border-brand-gold/30 text-brand-gold py-2 sm:py-2.5 md:py-3 overflow-hidden flex flex-nowrap whitespace-nowrap group select-none relative">
+                    {renderMarqueeTrack(false)}
+                    {renderMarqueeTrack(true)}
                 </div>
             )}
 
-            {/* ===== SECTION: Tentang Kami Snippet ===== */}
+            {/* ===== SECTION 3: Tentang Kami Snippet ===== */}
             <AboutSnippet homeStats={homeStats} />
 
-            {/* Portal Keanggotaan (Top Members) */}
-            <div className="bg-white py-16 border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-4">
+            {/* ===== SECTION 4: Program Unggulan (Moved Above Portal Keanggotaan) ===== */}
+            <div className="bg-white py-16 md:py-24 border-b border-gray-100">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl font-heading font-bold text-brand-navy mb-4">Portal Keanggotaan</h2>
-                        <p className="text-gray-600 max-w-2xl mx-auto">Kenali pahlawan lingkungan kami yang paling aktif berkontribusi untuk kelestarian Danau Matano.</p>
+                        <h2 className="text-3xl md:text-4xl font-heading font-bold text-brand-navy mb-4">Program Unggulan</h2>
+                        <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+                            Langkah nyata kami dalam menjaga dan memulihkan ekosistem Danau Matano.
+                        </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {programs && programs.length > 0 ? (
+                            programs.map(program => (
+                                <Link
+                                    href={`/program/${program.slug}`}
+                                    key={program.id}
+                                    className="group bg-white rounded-2xl shadow-sm border border-gray-200/80 overflow-hidden hover:shadow-lg hover:border-brand-teal/40 transition-all flex flex-col h-full"
+                                >
+                                    <div className="h-48 bg-gray-100 relative overflow-hidden flex items-center justify-center">
+                                        {program.icon_url ? (
+                                            <img
+                                                src={`/storage/${program.icon_url}`}
+                                                alt={program.name}
+                                                className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                                            />
+                                        ) : (
+                                            <div className="text-gray-400 font-heading text-xl">TMCC Program</div>
+                                        )}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/70 via-brand-navy/20 to-transparent"></div>
+                                        <h3 className="absolute bottom-4 left-4 right-4 font-bold text-white text-lg drop-shadow-sm">{program.name}</h3>
+                                    </div>
+                                    <div className="p-5 flex-grow">
+                                        <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">{program.description}</p>
+                                    </div>
+                                    <div className="p-5 pt-0 mt-auto">
+                                        <span className="text-brand-teal text-sm font-semibold group-hover:text-brand-gold transition-colors flex items-center">
+                                            Pelajari lebih lanjut <ChevronRight size={16} className="ml-1" />
+                                        </span>
+                                    </div>
+                                </Link>
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center text-gray-500 py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
+                                Belum ada program yang dipublikasikan.
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* ===== SECTION 5: Portal Keanggotaan (Top Members) ===== */}
+            <div className="bg-brand-paper py-16 md:py-24 border-b border-gray-200/60">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-heading font-bold text-brand-navy mb-4">Portal Keanggotaan</h2>
+                        <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+                            Kenali pahlawan lingkungan kami yang paling aktif berkontribusi untuk kelestarian Danau Matano.
+                        </p>
                     </div>
                     
                     <div className="flex flex-wrap justify-center gap-6 items-end">
@@ -149,7 +221,7 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
                             <>
                                 {/* Rank 2 */}
                                 <div className="relative flex flex-col items-center flex-1 max-w-[200px] text-center p-4">
-                                    <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-gray-300 mb-3 bg-white z-10 relative">
+                                    <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-gray-300 mb-3 bg-white z-10 relative shadow-sm">
                                         {topMembers[1].photo_url ? (
                                             <img src={`/storage/${topMembers[1].photo_url}`} alt={topMembers[1].name} className="w-full h-full object-cover" />
                                         ) : (
@@ -190,7 +262,7 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
 
                                 {/* Rank 3 */}
                                 <div className="relative flex flex-col items-center flex-1 max-w-[200px] text-center p-4">
-                                    <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-amber-600 mb-3 bg-white z-10 relative">
+                                    <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-amber-600 mb-3 bg-white z-10 relative shadow-sm">
                                         {topMembers[2].photo_url ? (
                                             <img src={`/storage/${topMembers[2].photo_url}`} alt={topMembers[2].name} className="w-full h-full object-cover" />
                                         ) : (
@@ -209,56 +281,16 @@ export default function Home({ slides, runningTexts, topMembers, programs, setti
                                 </div>
                             </>
                         ) : (
-                            <div className="w-full text-center py-8 text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                            <div className="w-full text-center py-12 text-gray-500 bg-white rounded-2xl border border-dashed border-gray-200">
                                 Belum ada data anggota yang cukup.
                             </div>
                         )}
                     </div>
                     
                     <div className="mt-12 text-center">
-                        <Link href="/anggota" className="inline-flex items-center justify-center px-6 py-3 border-2 border-brand-teal text-brand-teal font-bold rounded-lg hover:bg-brand-teal hover:text-white transition-colors">
+                        <Link href="/anggota" className="inline-flex items-center justify-center px-6 py-3 border-2 border-brand-teal text-brand-teal font-bold rounded-xl hover:bg-brand-teal hover:text-white transition-colors shadow-sm">
                             Lihat Semua Anggota <ChevronRight size={20} className="ml-2" />
                         </Link>
-                    </div>
-                </div>
-            </div>
-
-            {/* Highlight Program */}
-            <div className="bg-brand-paper py-16">
-                <div className="max-w-7xl mx-auto px-4">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl font-heading font-bold text-brand-navy mb-4">Program Unggulan</h2>
-                        <p className="text-gray-600 max-w-2xl mx-auto">Langkah nyata kami dalam menjaga dan memulihkan ekosistem Danau Matano.</p>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {programs && programs.length > 0 ? (
-                            programs.map(program => (
-                                <Link href={`/program/${program.slug}`} key={program.id} className="group bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col h-full">
-                                    <div className="h-48 bg-gray-100 relative overflow-hidden flex items-center justify-center">
-                                        {program.icon_url ? (
-                                            <img src={`/storage/${program.icon_url}`} alt={program.name} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" />
-                                        ) : (
-                                            <div className="text-gray-400 font-heading text-xl">TMCC Program</div>
-                                        )}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                        <h3 className="absolute bottom-4 left-4 right-4 font-bold text-white text-lg">{program.name}</h3>
-                                    </div>
-                                    <div className="p-5 flex-grow">
-                                        <p className="text-sm text-gray-600 line-clamp-3">{program.description}</p>
-                                    </div>
-                                    <div className="p-5 pt-0 mt-auto">
-                                        <span className="text-brand-teal text-sm font-semibold group-hover:text-brand-gold transition-colors flex items-center">
-                                            Pelajari lebih lanjut <ChevronRight size={16} className="ml-1" />
-                                        </span>
-                                    </div>
-                                </Link>
-                            ))
-                        ) : (
-                            <div className="col-span-full text-center text-gray-500 py-8 bg-white rounded-lg border border-dashed border-gray-300">
-                                Belum ada program yang dipublikasikan.
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>

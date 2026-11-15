@@ -23,10 +23,22 @@ export default function Partnerships({ partnerships, settings }) {
             <Head title="Partnership" />
 
             {/* Page Header */}
-            <div className="bg-brand-navy py-16 md:py-24 text-center border-b-4 border-brand-teal">
-                <div className="max-w-4xl mx-auto px-4">
-                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-gold mb-4">Partnership</h1>
-                    <p className="text-xl text-gray-200">
+            <div className="relative bg-brand-navy py-16 md:py-24 text-center border-b-4 border-brand-teal overflow-hidden">
+                <div className="absolute inset-0 z-0">
+                    {settings?.partnership_hero_image_url ? (
+                        <img
+                            src={`/storage/${settings.partnership_hero_image_url}`}
+                            alt="Background halaman Partnership"
+                            className="w-full h-full object-cover opacity-30"
+                        />
+                    ) : (
+                        <div className="w-full h-full bg-brand-navy" />
+                    )}
+                    <div className="absolute inset-0 bg-brand-navy/80 mix-blend-multiply" />
+                </div>
+                <div className="max-w-4xl mx-auto px-4 relative z-10">
+                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-brand-gold mb-4 drop-shadow-md">Partnership</h1>
+                    <p className="text-xl text-gray-200 drop-shadow">
                         Mitra dan pendukung yang telah bekerjasama dan berkontribusi bersama Tova Matano Care Center.
                     </p>
                 </div>

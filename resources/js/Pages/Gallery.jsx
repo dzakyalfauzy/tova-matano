@@ -1,5 +1,5 @@
 import PublicLayout from '@/Layouts/PublicLayout';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { Image, Play } from 'lucide-react';
 import { useState } from 'react';
 
@@ -23,36 +23,44 @@ export default function Gallery({ items, settings }) {
                     {items?.data && items.data.length > 0 ? (
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {items.data.map(item => (
-                                <button
+                                <figure
                                     key={item.id}
-                                    onClick={() => setSelected(item)}
-                                    className="group relative aspect-square rounded-xl overflow-hidden bg-gray-100 shadow-sm hover:shadow-lg transition-all"
+                                    className="group flex flex-col overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-lg transition-all"
                                 >
-                                    {item.type === 'PHOTO' ? (
-                                        <img
-                                            src={`/storage/${item.url}`}
-                                            alt={item.caption || 'Galeri TMCC'}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full bg-brand-navy/80 flex flex-col items-center justify-center">
-                                            <Play className="h-12 w-12 text-white mb-2" />
-                                            <span className="text-white text-xs">Video</span>
-                                        </div>
-                                    )}
-                                    <div className="absolute inset-0 bg-brand-navy/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
-                                        {item.caption && (
-                                            <p className="text-white text-xs font-medium line-clamp-2 text-left">{item.caption}</p>
-                                        )}
-                                    </div>
-                                    <div className="absolute top-2 right-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setSelected(item)}
+                                        className="relative block w-full aspect-square overflow-hidden bg-gray-100"
+                                    >
                                         {item.type === 'PHOTO' ? (
-                                            <Image className="h-4 w-4 text-white drop-shadow" />
+                                            <img
+                                                src={`/storage/${item.url}`}
+                                                alt={item.caption || 'Galeri TMCC'}
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                loading="lazy"
+                                            />
                                         ) : (
-                                            <Play className="h-4 w-4 text-white drop-shadow" />
+                                            <div className="w-full h-full bg-brand-navy/80 flex flex-col items-center justify-center">
+                                                <Play className="h-12 w-12 text-white mb-2" />
+                                                <span className="text-white text-xs">Video</span>
+                                            </div>
                                         )}
-                                    </div>
-                                </button>
+                                        <div className="absolute top-2 right-2">
+                                            {item.type === 'PHOTO' ? (
+                                                <Image className="h-4 w-4 text-white drop-shadow" />
+                                            ) : (
+                                                <Play className="h-4 w-4 text-white drop-shadow" />
+                                            )}
+                                        </div>
+                                    </button>
+                                    {item.caption && (
+                                        <figcaption className="border-t border-gray-100 px-3 py-2.5">
+                                            <p className="text-xs font-medium text-brand-navy line-clamp-2 break-words text-left">
+                                                {item.caption}
+                                            </p>
+                                        </figcaption>
+                                    )}
+                                </figure>
                             ))}
                         </div>
                     ) : (

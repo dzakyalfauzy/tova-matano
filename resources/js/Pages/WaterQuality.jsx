@@ -542,6 +542,23 @@ export default function WaterQuality({
                         </div>
                     </div>
 
+                    {/* Peta Titik Sampling — Static Map Image */}
+                    {settings?.water_quality_map_image_url && (
+                        <figure className="mt-8 md:mt-10 text-center">
+                            <img
+                                src={`/storage/${settings?.water_quality_map_image_url}`}
+                                alt="Peta titik sampling kualitas air Danau Matano"
+                                className="max-w-full h-auto rounded-lg border border-gray-100 object-contain shadow-sm"
+                                loading="lazy"
+                            />
+                            {settings?.water_quality_map_image_credit && (
+                                <figcaption className="mt-3 text-xs text-gray-500">
+                                    {settings?.water_quality_map_image_credit}
+                                </figcaption>
+                            )}
+                        </figure>
+                    )}
+
                     {/* Filters */}
                     <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col md:flex-row gap-4 items-center justify-between border border-gray-100">
                         <div className="w-full md:w-auto flex flex-col sm:flex-row gap-4">

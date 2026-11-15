@@ -7,6 +7,7 @@ const CATEGORY_COLORS = {
     RILIS_PERS: 'bg-blue-100 text-blue-700',
     BERITA: 'bg-orange-100 text-orange-700',
     KEBIJAKAN: 'bg-purple-100 text-purple-700',
+    CERITA: 'bg-amber-100 text-amber-800',
     BASELINE_STUDY: 'bg-brand-gold/20 text-brand-navy border border-brand-gold/30',
 };
 
@@ -15,6 +16,7 @@ const CATEGORY_LABELS = {
     RILIS_PERS: 'Rilis Pers',
     BERITA: 'Berita',
     KEBIJAKAN: 'Kebijakan',
+    CERITA: 'Cerita',
     BASELINE_STUDY: 'Baseline Study',
 };
 
