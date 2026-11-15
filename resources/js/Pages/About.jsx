@@ -203,8 +203,8 @@ export default function About({ founders, settings, aboutContent, aboutLakeImage
                     <div className="flex flex-wrap justify-center gap-8">
                         {founders && founders.length > 0 ? (
                             founders.map(founder => (
-                                <div key={founder.id} className="group w-full max-w-[280px]">
-                                    <div className="relative overflow-hidden rounded-xl aspect-[3/4] mb-4 bg-gray-100">
+                                <div key={founder.id} className="group w-full max-w-[200px] text-center">
+                                    <div className="relative overflow-hidden rounded-xl aspect-[3/4] mb-3 bg-gray-100 shadow-sm mx-auto">
                                         {founder.photo_url ? (
                                             <img 
                                                 src={`/storage/${founder.photo_url}`} 
@@ -216,14 +216,14 @@ export default function About({ founders, settings, aboutContent, aboutLakeImage
                                                 {founder.name.charAt(0)}
                                             </div>
                                         )}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-brand-navy/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                                            <p className="text-white text-sm font-medium">{t.founder_dedication}</p>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-brand-navy/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                                            <p className="text-white text-xs font-medium">{t.founder_dedication}</p>
                                         </div>
                                     </div>
-                                    <h3 className="text-xl font-bold text-brand-navy">{founder.name}</h3>
-                                    <p className="text-brand-teal font-medium mb-1">{founder.role}</p>
+                                    <h3 className="text-lg font-bold text-brand-navy">{founder.name}</h3>
+                                    <p className="text-brand-teal text-sm font-medium mb-0.5">{founder.role}</p>
                                     {founder.org_name && (
-                                        <p className="text-sm text-gray-500">{founder.org_name}</p>
+                                        <p className="text-xs text-gray-500">{founder.org_name}</p>
                                     )}
                                 </div>
                             ))
